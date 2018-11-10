@@ -31,3 +31,9 @@ tests/_support/_generated
 
 #vagrant folder
 /.vagrant
+
+# Passwords
+pws.py
+
+# Insertar usuarios BD
+/db/usuariosinsert.sql
