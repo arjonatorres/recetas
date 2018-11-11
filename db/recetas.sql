@@ -5,10 +5,13 @@
 DROP TABLE IF EXISTS usuarios CASCADE;
 CREATE TABLE usuarios
 (
-    id       BIGSERIAL     PRIMARY KEY,
-    usuario  VARCHAR(255),
-    password VARCHAR(255)  NOT NULL,
-    token    VARCHAR(255)
+    id         bigserial    PRIMARY KEY
+  , usuario     varchar(255) NOT NULL UNIQUE
+  , password   varchar(255) NOT NULL
+  , email      varchar(255) NOT NULL
+  , auth_key   varchar(255)
+  , token_val  varchar(255) UNIQUE
+  , created_at timestamp(0) NOT NULL DEFAULT localtimestamp
 );
 
 DROP TABLE IF EXISTS categorias CASCADE;
