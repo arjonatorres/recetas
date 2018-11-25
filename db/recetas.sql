@@ -29,7 +29,7 @@ CREATE TABLE recetas
   , historia     varchar(10000)
   , ingredientes varchar(10000) NOT NULL
   , comensales   numeric(2)
-  , pie          varchar(10000)
+  , comentarios  varchar(10000)
   , categoria_id bigint         NOT NULL REFERENCES categorias (id)
                                 ON DELETE NO ACTION ON UPDATE CASCADE
   , usuario_id   bigint         NOT NULL REFERENCES usuarios (id)

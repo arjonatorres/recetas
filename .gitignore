@@ -37,3 +37,12 @@ pws.py
 
 # Insertar usuarios BD
 /db/usuariosinsert.sql
+
+# Imágenes
+/web/images/avatar/*
+/web/images/pasos/*
+/web/images/recetas/*
+!/web/images/avatar/0.png
+
+# Variables de entorno
+.env

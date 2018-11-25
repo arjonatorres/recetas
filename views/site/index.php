@@ -4,6 +4,7 @@
 
 $this->title = 'Recetas';
 ?>
+
 <div class="site-index">
 
     <div class="jumbotron">
