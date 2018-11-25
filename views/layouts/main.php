@@ -9,6 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\helpers\UtilHelper;
 
 AppAsset::register($this);
 ?>
@@ -32,29 +33,123 @@ AppAsset::register($this);
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'my-navbar navbar-fixed-top',
         ],
     ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            Yii::$app->user->isGuest ? (
-            ''
-            ) : (['label' => 'Nueva Receta', 'url' => ['/recetas/create']]),
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
+
+    $menuItems = [];
+    if (Yii::$app->user->isGuest) {
+        $menuItems = [
+            [
+                'label' => 'Login',
+                'url' => ['/site/login'],
+                'options' => [
+                    'class' => 'text-center',
+                ],
+            ],
+            [
+                'label' => 'Registrarse',
+                'url' => ['usuarios/create'],
+                'options' => [
+                    'class' => 'text-center',
+                ],
+            ],
+        ];
+        $menuCasa = [
+            'label' => '',
+//            UtilHelper::menuItem('Blog', 'book', 'posts/index'),
+        ];
+    } else {
+        $menuCasa = [
+            [
+                'label' => '',
+            ],
+        ];
+        $usuario = Yii::$app->user->identity;
+        $ruta = $usuario->rutaAvatar;
+
+        $menuItems[] =
+            '<li class="menu-item-derecha">'
+            . Html::a('Nueva Receta ' . UtilHelper::glyphicon('plus', ['class' => 'btn btn-success', 'style' => 'border: 0px;']),
+            ['recetas/create'],
+            ['class' => 'text-success', 'style' => 'padding: 9px;'])
+            . '</li>';
+
+        $menuItems[] = [
+            'label' => Html::img($ruta,
+                ['class' => 'img-sm img-circle']
+            ),
+            'encode' => false,
+            'items' => [
+                [
+                    'label' => '<div style="display:flex">'
+                        . '<div>'
+                        . Html::img($ruta,
+                            ['class' => 'img-md img-circle'])
+                        . '</div>'
+                        . '<div style="margin-top: 8px;">'
+                        . '<strong>' . Html::encode($usuario->usuario)
+                        . '</strong>'
+                        . '<br>'
+                        . '<p>' . Html::encode($usuario->email) . '</p>'
+                        . Html::a(UtilHelper::glyphicon('cog') . ' Mi cuenta',
+                            ['usuarios/update'],
+                            ['class' => 'btn btn-sm btn-success'])
+                        . '</div>'
+                        . '</div>',
+                    'encode' => false,
+                ],
+                '<li class="divider"></li>',
+                Html::beginForm(['/site/logout'], 'post')
+                . '<div class="col-md-offset-2 col-md-8">'
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->usuario . ')',
-                    ['class' => 'btn btn-link logout']
+                    UtilHelper::glyphicon('log-out') . ' Cerrar sesión',
+                    ['class' => 'btn btn-sm btn-danger btn-block']
                 )
                 . Html::endForm()
-                . '</li>'
-            )
-        ],
+                . '</div>',
+            ],
+            'dropDownOptions' => [
+                'id' => 'menu-usuario',
+            ],
+            'options' => [
+                'class' => 'user-dropdown text-center',
+            ],
+        ];
+    }
+    echo Nav::widget([
+        'id' => 'menu-recetas',
+        'options' => ['class' => 'navbar-nav navbar-left menu-item'],
+        'items' => $menuCasa,
     ]);
+    echo Nav::widget([
+        'id' => 'menu-user',
+        'options' => ['class' => 'navbar-nav navbar-right'],
+        'encodeLabels' => false,
+        'items' => $menuItems,
+    ]);
+
+//
+//    echo Nav::widget([
+//        'options' => ['class' => 'navbar-nav navbar-right'],
+//        'items' => [
+//            Yii::$app->user->isGuest ? (
+//            ''
+//            ) : (['label' => 'Nueva Receta', 'url' => ['/recetas/create']]),
+//            Yii::$app->user->isGuest ? (
+//                ['label' => 'Login', 'url' => ['/site/login']]
+//            ) : (
+//                '<li>'
+//                . Html::beginForm(['/site/logout'], 'post')
+//                . Html::submitButton(
+//                    'Logout (' . Yii::$app->user->identity->usuario . ')',
+//                    ['class' => 'btn btn-link logout']
+//                )
+//                . Html::endForm()
+//                . '</li>'
+//            )
+//        ],
+//    ]);
     NavBar::end();
     ?>
 
@@ -69,7 +164,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; José Arjona <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

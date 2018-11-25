@@ -8,6 +8,7 @@ body {
     height: auto;
     margin: 0 auto -60px;
     padding: 0 0 60px;
+    background-color: #fafaf5;
 }
 
 .wrap > .container {
@@ -16,7 +17,7 @@ body {
 
 .footer {
     height: 60px;
-    background-color: #f5f5f5;
+    background-color: #ddd;
     border-top: 1px solid #ddd;
     padding-top: 20px;
 }
@@ -112,4 +113,30 @@ a.desc:after {
 
 .nav > li > form > button.logout:focus {
     outline: none;
+}
+
+.my-navbar {
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.file-input > .file-preview {
+    background-color: #fff;
+}
+
+.img-sm {
+    height: 32px;
+}
+
+.user-dropdown > .dropdown-toggle {
+    padding: 9px;
+}
+
+.menu-item-derecha {
+    border-right: 1px solid #ddd;
+}
+
+.img-md {
+    margin-right: 20px;
+    height: 96px;
 }
