@@ -102,7 +102,7 @@ class UsuariosController extends Controller
         $model->scenario = Usuarios::ESCENARIO_UPDATE;
         $model->password = '';
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->foto = UploadedFile::getInstance($model, 'foto');
             if ($model->save() && $model->upload()) {
                 Yii::$app->session->setFlash('info','Su cuenta ha sido actualizada correctamente');
