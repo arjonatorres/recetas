@@ -42,10 +42,10 @@ CREATE INDEX idx_recetas_titulo ON recetas (titulo);
 DROP TABLE IF EXISTS pasos CASCADE;
 CREATE TABLE pasos
 (
-    id        bigserial  PRIMARY KEY
-  , texto     numeric(6) NOT NULL UNIQUE
-  , receta_id bigint     NOT NULL REFERENCES recetas (id)
-                         ON DELETE NO ACTION ON UPDATE CASCADE
+    id        bigserial      PRIMARY KEY
+  , texto     varchar(10000) NOT NULL
+  , receta_id bigint         NOT NULL REFERENCES recetas (id)
+                             ON DELETE NO ACTION ON UPDATE CASCADE
 );
 
 
