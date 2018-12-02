@@ -1,0 +1,15 @@
+.form-group {
+    margin-bottom: 50px;
+}
+
+.btn-anadir-paso {
+    margin-top: -30px;
+    margin-bottom: 50px;
+}
+
+.btn-borrar-paso {
+    margin-top: -30px;
+    margin-bottom: 50px;
+    margin-left: 10px;
+    display: inline;
+}

@@ -12,7 +12,7 @@ use Yii;
  * @property string $historia
  * @property string $ingredientes
  * @property string $comensales
- * @property string $pie
+ * @property string $comentarios
  * @property int $categoria_id
  * @property int $usuario_id
  * @property string $created_at
@@ -23,6 +23,12 @@ use Yii;
  */
 class Recetas extends \yii\db\ActiveRecord
 {
+    /**
+     * Contiene la foto del usuario subida en el formulario.
+     * @var UploadedFile
+     */
+    public $fotoPrincipal;
+
     /**
      * {@inheritdoc}
      */
@@ -37,15 +43,17 @@ class Recetas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['titulo', 'ingredientes', 'categoria_id', 'usuario_id'], 'required'],
+            [['titulo', 'ingredientes', 'categoria_id'], 'required'],
             [['comensales'], 'number'],
-            [['categoria_id', 'usuario_id'], 'default', 'value' => null],
-            [['categoria_id', 'usuario_id'], 'integer'],
+            [['categoria_id'], 'default', 'value' => null],
+            [['categoria_id'], 'integer'],
             [['created_at'], 'safe'],
             [['titulo'], 'string', 'max' => 255],
-            [['historia', 'ingredientes', 'pie'], 'string', 'max' => 10000],
+            [['historia', 'ingredientes', 'comentarios'], 'string', 'max' => 10000],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::className(), 'targetAttribute' => ['categoria_id' => 'id']],
-            [['usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
+            [['!usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
+            [['fotoPrincipal'], 'file', 'extensions' => 'jpg, png'],
+            [['fotoPrincipal'], 'file', 'maxSize' => 1024 * 1024 * 8, 'message' => 'La foto principal tiene que ser menor de 8MB'],
         ];
     }
 
@@ -60,11 +68,32 @@ class Recetas extends \yii\db\ActiveRecord
             'historia' => 'Historia',
             'ingredientes' => 'Ingredientes',
             'comensales' => 'Comensales',
-            'pie' => 'Pie',
-            'categoria_id' => 'Categoria ID',
+            'comentarios' => 'Comentarios',
+            'categoria_id' => 'Categoria',
             'usuario_id' => 'Usuario ID',
             'created_at' => 'Created At',
+            'fotoPrincipal' => 'Foto principal'
         ];
+    }
+
+    /**
+     * Guarda fotos
+     * @return bool Si se ha efectuado la subida correctamente.
+     */
+
+    /**
+     * Guarda fotos
+     * @return bool     Si se ha efectuado la subida correctamente.
+     */
+    public function upload()
+    {
+        if ($this->fotoPrincipal === null) {
+            return true;
+        }
+        $id = 'receta' . $this->id;
+        $ruta = Yii::$app->basePath . '/web/images/recetas/' . $id . '.' . $this->fotoPrincipal->extension;
+        $res = $this->fotoPrincipal->saveAs($ruta);
+        return $res;
     }
 
     /**

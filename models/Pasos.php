@@ -30,10 +30,9 @@ class Pasos extends \yii\db\ActiveRecord
     {
         return [
             [['texto', 'receta_id'], 'required'],
-            [['texto'], 'number'],
+            [['texto'], 'string', 'max' => 10000],
             [['receta_id'], 'default', 'value' => null],
             [['receta_id'], 'integer'],
-            [['texto'], 'unique'],
             [['receta_id'], 'exist', 'skipOnError' => true, 'targetClass' => Recetas::className(), 'targetAttribute' => ['receta_id' => 'id']],
         ];
     }
@@ -45,7 +44,7 @@ class Pasos extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'texto' => 'Texto',
+            'texto' => 'Paso',
             'receta_id' => 'Receta ID',
         ];
     }
