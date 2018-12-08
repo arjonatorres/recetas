@@ -4,11 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\helpers\UtilHelper;
 use kartik\file\FileInput;
+use kartik\dialog\Dialog;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Recetas */
 /* @var $form yii\widgets\ActiveForm */
 
+echo Dialog::widget();
 $this->registerJsFile('@web/js/recetas.js', [
     'depends' => [\yii\web\JqueryAsset::className()],
 ]);
@@ -25,9 +27,9 @@ $categorias = UtilHelper::getDropDownList($categorias);
         <div class="panel-body panel-body-gris">
             <div class="recetas-form">
 
-                <?php $form = ActiveForm::begin(); ?>
+                <?php $form = ActiveForm::begin(['id' => 'form']); ?>
 
-                <?= $form->field($model, 'fotoPrincipal')->widget(FileInput::classname(), [
+                <?= $form->field($model, 'foto')->widget(FileInput::classname(), [
                     'options' => [
                         'accept' => 'image/*',
                     ],
@@ -35,6 +37,7 @@ $categorias = UtilHelper::getDropDownList($categorias);
                     'pluginOptions' => [
                         'browseOnZoneClick' => true,
                         'dropZoneTitle' => 'Sube la foto de tu receta',
+                        'dropZoneClickTitle' => '',
                         'showPreview' => true,
                         'showCaption' => false,
                         'showRemove' => false,
@@ -63,32 +66,56 @@ $categorias = UtilHelper::getDropDownList($categorias);
                         'style' => 'resize:none'
                     ]
                 ) ?>
-
-                <div class="col-md-6" style="padding-left: 0px">
-                    <?= $form->field($model, 'comensales')->textInput(
-                        [
-                            'type' => 'number',
-                            'min' => 1,
-                            'value' => 2,
-                        ]
-                    ) ?>
-                </div>
-                <div class="col-md-6" style="padding-right: 0px">
-                    <?=$form->field($model, 'categoria_id')->dropDownList($categorias, ['prompt' => 'Seleccione Uno' ]); ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $form->field($model, 'comensales')->textInput(
+                            [
+                                'type' => 'number',
+                                'min' => 1,
+                                'value' => 2,
+                            ]
+                        ) ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?=$form->field($model, 'categoria_id')->dropDownList($categorias, ['prompt' => 'Seleccione Uno' ]); ?>
+                    </div>
                 </div>
 
                 <h5><b>Pasos</b></h5>
 
-                <?= $form->field($pasos, 'texto')->textarea(
-                    [
-                        'rows' => 4,
-                        'name' => 'Pasos[0]',
-                        'placeholder' => 'Describe cómo lo hiciste...',
-                        'style' => 'resize:none'
-                    ]
-                )->label(
-                    '<h3 style="display:inline"><span class="label label-default">1</span></h3>', ['style' => 'margin-bottom: 20px']
-                ) ?>
+                <div class="entorno-paso-1">
+                    <?= $form->field($pasos, 'texto', ['options' => ['class' => 'pasos']])->textarea(
+                        [
+                            'rows' => 4,
+                            'name' => 'Pasos[0]',
+                            'placeholder' => 'Describe cómo lo hiciste...',
+                            'style' => 'resize:none',
+                        ]
+                    )->label(
+                        '<h3 style="display:inline"><span class="label label-default">1</span></h3>', ['style' => 'margin-bottom: 20px']
+                    ) ?>
+                    <div class="row paso-foto-1">
+                        <div class="col-md-5">
+                            <?= $form->field($pasos, 'foto')->widget(FileInput::classname(), [
+                                'options' => [
+                                    'accept' => 'image/*',
+                                    'name' => 'Pasos[foto0]',
+                                ],
+                                'language' => 'es',
+                                'pluginOptions' => [
+                                    'browseOnZoneClick' => true,
+                                    'dropZoneTitle' => 'Sube la foto del paso',
+                                    'dropZoneClickTitle' => '',
+                                    'showPreview' => true,
+                                    'showCaption' => false,
+                                    'showRemove' => false,
+                                    'showUpload' => false,
+                                    'showBrowse' => false,
+                                ]
+                            ])->label(false); ?>
+                        </div>
+                    </div>
+                </div>
 
                 <?= Html::button('+ Añadir Paso', ['class' => 'btn btn-warning btn-xs btn-anadir-paso']) ?>
                 <?= Html::button('- Borrar Paso', ['class' => 'btn btn-danger btn-xs btn-borrar-paso', 'style' => 'display:none']) ?>

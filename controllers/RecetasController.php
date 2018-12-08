@@ -86,8 +86,12 @@ class RecetasController extends Controller
         if (Yii::$app->request->isPost) {
             $recetas->load(Yii::$app->request->post());
             foreach (Yii::$app->request->post('Pasos') as $i => $data) {
+                if (preg_match('/^foto/', $i) == 1) {
+                    continue;
+                }
                 $newPasos = new Pasos();
                 $newPasos->texto = $data;
+                $newPasos->foto = UploadedFile::getInstance($newPasos, 'foto' . $i);
                 $pasosArray[$i] = $newPasos;
             }
             $transaction = Yii::$app->db->beginTransaction();
@@ -96,11 +100,15 @@ class RecetasController extends Controller
                 $valid = $recetas->validate();
                 $valid = Model::validateMultiple($pasosArray, ['texto']) && $valid;
                 if ($valid) {
-                    $recetas->fotoPrincipal = UploadedFile::getInstance($recetas, 'fotoPrincipal');
+                    $recetas->foto = UploadedFile::getInstance($recetas, 'foto');
                     $recetas->save(false);
-                    foreach ($pasosArray as $newPasos) {
+                    foreach ($pasosArray as $i => $newPasos) {
                         $newPasos->receta_id = $recetas->id;
-                        $newPasos->save(false);
+                        if ($newPasos->upload($i)) {
+                            $newPasos->save(false);
+                        } else {
+                            throw new Exception();
+                        }
                     }
                     if ($recetas->upload()) {
                         $transaction->commit();
@@ -117,21 +125,6 @@ class RecetasController extends Controller
                 return $this->goHome();
             }
         }
-
-        if ($recetas->load(Yii::$app->request->post())) {
-            $recetas->fotoPrincipal = UploadedFile::getInstance($recetas, 'fotoPrincipal');
-            if ($recetas->save() && $recetas->upload()) {
-                $arrayPasos = Yii::$app->request->post('Pasos');
-                foreach ($arrayPasos as $paso) {
-                    $pasos = new Pasos();
-                    $pasos->texto = $paso;
-                    $pasos->receta_id = $recetas->id;
-                    $pasos->save();
-                }
-                return $this->redirect(['view', 'id' => $recetas->id]);
-            }
-        }
-
 
         return $this->render('create', [
             'model' => $recetas,

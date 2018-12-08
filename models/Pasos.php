@@ -16,6 +16,12 @@ use Yii;
 class Pasos extends \yii\db\ActiveRecord
 {
     /**
+     * Contiene la foto del paso subida en el formulario.
+     * @var UploadedFile
+     */
+    public $foto;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -34,6 +40,8 @@ class Pasos extends \yii\db\ActiveRecord
             [['receta_id'], 'default', 'value' => null],
             [['receta_id'], 'integer'],
             [['receta_id'], 'exist', 'skipOnError' => true, 'targetClass' => Recetas::className(), 'targetAttribute' => ['receta_id' => 'id']],
+            [['foto'], 'file', 'extensions' => 'jpg, png'],
+            [['foto'], 'file', 'maxSize' => 1024 * 1024 * 8, 'message' => 'La foto tiene que ser menor de 8MB'],
         ];
     }
 
@@ -46,7 +54,24 @@ class Pasos extends \yii\db\ActiveRecord
             'id' => 'ID',
             'texto' => 'Paso',
             'receta_id' => 'Receta ID',
+            'foto' => 'Foto'
         ];
+    }
+
+    /**
+     * Guarda fotos
+     * @param $i    El número de paso
+     * @return bool Si se ha efectuado la subida correctamente.
+     */
+    public function upload($i)
+    {
+        if ($this->foto === null) {
+            return true;
+        }
+        $id = 'paso-' . $this->receta_id . '-' . $i;
+        $ruta = Yii::$app->basePath . '/web/images/pasos/' . $id . '.' . $this->foto->extension;
+        $res = $this->foto->saveAs($ruta);
+        return $res;
     }
 
     /**

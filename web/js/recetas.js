@@ -8,31 +8,73 @@ $('textarea').each(function () {
 $('textarea').trigger('input');
 
 pasoActual = $('.field-pasos-texto');
+divNuevo = '';
 var pasoRef = pasoActual.clone();
 var contador = 0;
 
 $('.btn-anadir-paso').on('click', function() {
-    if(pasoActual.find('textarea').val() == '') {
-        return;
-    }
+    // if(pasoActual.find('textarea').val() == '') {
+    //     krajeeDialog.alert('El paso no puede estar vacio.');
+    //     return;
+    // }
     contador += 1;
     var pasoNuevo = pasoRef.clone();
     var textArea = pasoNuevo.find('textarea');
+    // Div nuevo
+    divNuevo = $("<div>", {
+        'class': 'entorno-paso-' + (contador+1)
+    });
+    divNuevo.hide();
+    $('.entorno-paso-' + contador).after(divNuevo);
+
+    // Paso nuevo
+    textArea.val('');
     textArea.attr('name', 'Pasos[' + contador + ']');
     textArea.attr('id', 'pasos-texto-' + contador);
     textArea.parent().removeClass('field-pasos-texto');
     textArea.parent().addClass('field-pasos-texto-' + contador);
-    pasoNuevo.css('margin-top', '-30px');
-    pasoNuevo.hide();
     pasoNuevo.find('.label'). text(contador+1);
-    pasoActual.after(pasoNuevo);
-    pasoNuevo.slideDown(400, function() {
+    divNuevo.append(pasoNuevo);
+
+    var div2 = $("<div>", {
+        'class': 'row paso-foto-' + (contador+1)
+    });
+    divNuevo.append(div2);
+
+    var div3 = $("<div>", {
+        'class': 'col-md-5'
+    });
+    div2.append(div3);
+
+    var div4 = $("<div>", {
+        'class': 'form-group field-pasos-foto-' + (contador+1)
+    });
+    div3.append(div4);
+
+    // Foto nueva
+    // var fotoNueva = '<input type="file" id="pasos-foto-' + contador + '" name="Pasos-Foto[' + contador + ']" accept="image/*" />';
+    var fotoNueva = '<input type="file" id="pasos-foto-' + contador + '" name="Pasos[foto' + contador + ']" accept="image/*" />';
+    div4.append(fotoNueva);
+
+    $('#pasos-foto-' + contador).fileinput('enable');
+    $('#pasos-foto-' + contador).fileinput('refresh', {
+        browseOnZoneClick: true,
+        dropZoneTitle: 'Sube la foto del paso',
+        dropZoneClickTitle: '',
+        showPreview: true,
+        showCaption: false,
+        showRemove: false,
+        showUpload: false,
+        showBrowse: false,
+    });
+
+    divNuevo.slideDown(400, function() {
         $('.btn-borrar-paso').show();
         textArea.focus();
     });
     pasoActual = pasoNuevo;
 
-    $("#w0").yiiActiveForm("add",{
+    $("#form").yiiActiveForm("add",{
         "id": "pasos-texto-" + contador,
         "name": "Pasos[" + contador + "]",
         "container": ".field-pasos-texto-" + contador,
@@ -53,16 +95,20 @@ $('.btn-anadir-paso').on('click', function() {
 });
 
 $('.btn-borrar-paso').on('click', function() {
-    console.log('borrar');
-    $("#w0").yiiActiveForm("remove",{
-        "id": "pasos-texto-" + contador
-    });
-    contador -= 1;
-    if (contador == 0) {
-        $('.btn-borrar-paso').hide();
-    }
-    pasoActual.slideUp(400, function() {
-        pasoActual.remove();
-        pasoActual = contador != 0 ? $('.field-pasos-texto-' + (contador)): $('.field-pasos-texto');
+    krajeeDialog.confirm("¿Está seguro que quiere borrar el paso?", function (result) {
+        if (result) {
+            $("#form").yiiActiveForm("remove",{
+                "id": "pasos-texto-" + contador
+            });
+            contador -= 1;
+            if (contador == 0) {
+                $('.btn-borrar-paso').hide();
+            }
+            divNuevo.slideUp(400, function() {
+                divNuevo.remove();
+                divNuevo = $('.entorno-paso-' + (contador+1));
+                pasoActual = contador != 0 ? $('.field-pasos-texto-' + (contador)): $('.field-pasos-texto');
+            });
+        }
     });
 });

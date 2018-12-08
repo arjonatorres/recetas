@@ -24,10 +24,10 @@ use Yii;
 class Recetas extends \yii\db\ActiveRecord
 {
     /**
-     * Contiene la foto del usuario subida en el formulario.
+     * Contiene la foto principal de la receta subida en el formulario.
      * @var UploadedFile
      */
-    public $fotoPrincipal;
+    public $foto;
 
     /**
      * {@inheritdoc}
@@ -52,8 +52,8 @@ class Recetas extends \yii\db\ActiveRecord
             [['historia', 'ingredientes', 'comentarios'], 'string', 'max' => 10000],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::className(), 'targetAttribute' => ['categoria_id' => 'id']],
             [['!usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
-            [['fotoPrincipal'], 'file', 'extensions' => 'jpg, png'],
-            [['fotoPrincipal'], 'file', 'maxSize' => 1024 * 1024 * 8, 'message' => 'La foto principal tiene que ser menor de 8MB'],
+            [['foto'], 'file', 'extensions' => 'jpg, png'],
+            [['foto'], 'file', 'maxSize' => 1024 * 1024 * 8, 'message' => 'La foto principal tiene que ser menor de 8MB'],
         ];
     }
 
@@ -72,7 +72,7 @@ class Recetas extends \yii\db\ActiveRecord
             'categoria_id' => 'Categoria',
             'usuario_id' => 'Usuario ID',
             'created_at' => 'Created At',
-            'fotoPrincipal' => 'Foto principal'
+            'foto' => 'Foto principal'
         ];
     }
 
@@ -80,19 +80,14 @@ class Recetas extends \yii\db\ActiveRecord
      * Guarda fotos
      * @return bool Si se ha efectuado la subida correctamente.
      */
-
-    /**
-     * Guarda fotos
-     * @return bool     Si se ha efectuado la subida correctamente.
-     */
     public function upload()
     {
-        if ($this->fotoPrincipal === null) {
+        if ($this->foto === null) {
             return true;
         }
         $id = 'receta' . $this->id;
-        $ruta = Yii::$app->basePath . '/web/images/recetas/' . $id . '.' . $this->fotoPrincipal->extension;
-        $res = $this->fotoPrincipal->saveAs($ruta);
+        $ruta = Yii::$app->basePath . '/web/images/recetas/' . $id . '.' . $this->foto->extension;
+        $res = $this->foto->saveAs($ruta);
         return $res;
     }
 
