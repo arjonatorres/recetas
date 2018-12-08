@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Recetas */
 
-$this->title = $model->id;
+$this->title = $model->titulo . ' de ' . Yii::$app->user->identity->usuario;
 $this->params['breadcrumbs'][] = ['label' => 'Recetas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -28,12 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'titulo',
             'historia',
             'ingredientes',
             'comensales',
-            'pie',
+            'comentarios',
             'categoria_id',
             'usuario_id',
             'created_at',

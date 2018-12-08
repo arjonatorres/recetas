@@ -5,17 +5,17 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Recetas */
-
-$this->title = 'Create Recetas';
-$this->params['breadcrumbs'][] = ['label' => 'Recetas', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Recetas';
 ?>
-<div class="recetas-create">
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="recetas-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+            <?= $this->render('_form', [
+                'model' => $model,
+                'categorias' => $categorias,
+                'pasos' => $pasos,
+            ]) ?>
+        </div>
+    </div>
 </div>

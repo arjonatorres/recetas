@@ -4,10 +4,16 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Recetas;
+use app\models\Categorias;
+use app\models\Pasos;
 use app\models\RecetasSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\web\UploadedFile;
+use yii\base\Model;
+use yii\base\Exception;
 
 /**
  * RecetasController implements the CRUD actions for Recetas model.
@@ -24,6 +30,16 @@ class RecetasController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -64,14 +80,56 @@ class RecetasController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Recetas();
+        $recetas = new Recetas(['usuario_id' => Yii::$app->user->id]);
+        $pasos = new Pasos();
+        $categorias = Categorias::find()->all();
+        if (Yii::$app->request->isPost) {
+            $recetas->load(Yii::$app->request->post());
+            foreach (Yii::$app->request->post('Pasos') as $i => $data) {
+                if (preg_match('/^foto/', $i) == 1) {
+                    continue;
+                }
+                $newPasos = new Pasos();
+                $newPasos->texto = $data;
+                $newPasos->foto = UploadedFile::getInstance($newPasos, 'foto' . $i);
+                $pasosArray[$i] = $newPasos;
+            }
+            $transaction = Yii::$app->db->beginTransaction();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            try {
+                $valid = $recetas->validate();
+                $valid = Model::validateMultiple($pasosArray, ['texto']) && $valid;
+                if ($valid) {
+                    $recetas->foto = UploadedFile::getInstance($recetas, 'foto');
+                    $recetas->save(false);
+                    foreach ($pasosArray as $i => $newPasos) {
+                        $newPasos->receta_id = $recetas->id;
+                        if ($newPasos->upload($i)) {
+                            $newPasos->save(false);
+                        } else {
+                            throw new Exception();
+                        }
+                    }
+                    if ($recetas->upload()) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $recetas->id]);
+                    } else {
+                        throw new Exception();
+                    }
+                } else {
+                    throw new Exception();
+                }
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('danger','Ha ocurrido un error al crear la Receta');
+                return $this->goHome();
+            }
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model' => $recetas,
+            'categorias' => $categorias,
+            'pasos' => $pasos,
         ]);
     }
 
