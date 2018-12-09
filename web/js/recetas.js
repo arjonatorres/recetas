@@ -52,8 +52,7 @@ $('.btn-anadir-paso').on('click', function() {
     div3.append(div4);
 
     // Foto nueva
-    // var fotoNueva = '<input type="file" id="pasos-foto-' + contador + '" name="Pasos-Foto[' + contador + ']" accept="image/*" />';
-    var fotoNueva = '<input type="file" id="pasos-foto-' + contador + '" name="Pasos[foto' + contador + ']" accept="image/*" />';
+    var fotoNueva = '<input type="file" id="pasos-foto-' + contador + '" name="Pasos[foto' + contador + ']" accept="image/jpeg" />';
     div4.append(fotoNueva);
 
     $('#pasos-foto-' + contador).fileinput('enable');

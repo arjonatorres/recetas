@@ -31,12 +31,6 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     public $foto;
 
     /**
-     * Lista de extensiones soportadas por el avatar
-     * @var array
-     */
-    public $extensions = ['jpg', 'png'];
-
-    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -93,7 +87,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         if ($this->foto === null) {
             return true;
         }
-        $nombre = Yii::$app->basePath . '/web/images/avatar/' . $this->id . '.' . $this->foto->extension;
+        $nombre = Yii::$app->basePath . '/web/images/avatar/' . $this->id . '.jpg';
         $res = $this->foto->saveAs($nombre);
         if ($res) {
             Image::thumbnail($nombre, 300, 300)->save($nombre, ['quality' => 80]);
@@ -110,11 +104,9 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     {
         $id = $this->id;
 
-        foreach ($this->extensions as $ext) {
-            $ruta = 'images/avatar/' . $id . '.' . $ext;
-            if (file_exists($ruta)) {
-                return $ruta;
-            }
+        $ruta = 'images/avatar/' . $id . '.jpg';
+        if (file_exists($ruta)) {
+            return $ruta;
         }
         return 'images/avatar/0.png';
     }
@@ -132,8 +124,6 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         $rutaBase = Yii::$app->basePath . '/web/images/avatar/';
         if (file_exists($rutaBase . $id . '.jpg')) {
             $ruta = '@web/images/avatar/' . $id . '.jpg';
-        } else if (file_exists($rutaBase . $id . '.png')) {
-            $ruta = '@web/images/avatar/' . $id . '.png';
         } else {
             $ruta = '@web/images/avatar/0.png';
         }

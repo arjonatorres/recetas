@@ -23,7 +23,7 @@ $this->title = 'Modificar un usuario';
 
                     <?= $form->field($model, 'foto')->widget(FileInput::classname(), [
                         'options' => [
-                            'accept' => 'image/*',
+                            'accept' => 'image/jpeg',
                         ],
                         'language' => 'es',
                         'pluginOptions' => [

@@ -7,13 +7,18 @@ $config = [
     'id' => 'basic',
     'name'=>'Recetas',
     'basePath' => dirname(__DIR__),
-    'language' => 'es',
+    'language' => 'es-ES',
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'formatter' => [
+            'timeZone' => 'Europe/Madrid',
+            'datetimeFormat' => $params['datetimeFormat'],
+            'dateFormat' => $params['dateFormat'],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'qhDR3LYZkQTqlanaXq7EKQoENx2QzWQw',

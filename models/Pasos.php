@@ -75,6 +75,22 @@ class Pasos extends \yii\db\ActiveRecord
     }
 
     /**
+     * Devuelve la imagen del paso si existe
+     * @param $id_receta   El id de la receta
+     * @param $id_paso     El id del paso
+     * @return bool|string La ruta o false si no existe la imagen
+     */
+    public function getRutaImagen ($id_receta, $id_paso) {
+        $rutaBase = Yii::$app->basePath . '/web/images/pasos/paso-';
+        if (file_exists($rutaBase . $id_receta . '-' . $id_paso . '.jpg')) {
+            $ruta = '@web/images/pasos/paso-'. $id_receta . '-' . $id_paso . '.jpg';
+        } else {
+            $ruta = false;
+        }
+        return $ruta;
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getReceta()
