@@ -98,7 +98,7 @@ $categorias = UtilHelper::getDropDownList($categorias);
                         <div class="col-md-5">
                             <?= $form->field($pasos, 'foto')->widget(FileInput::classname(), [
                                 'options' => [
-                                    'accept' => 'image/*',
+                                    'accept' => 'image/jpeg',
                                     'name' => 'Pasos[foto0]',
                                 ],
                                 'language' => 'es',

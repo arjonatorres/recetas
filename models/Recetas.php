@@ -43,9 +43,9 @@ class Recetas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['titulo', 'ingredientes', 'categoria_id'], 'required'],
+            [['titulo', 'ingredientes', 'categoria_id', 'comensales'], 'required'],
             [['comensales'], 'number'],
-            [['categoria_id'], 'default', 'value' => null],
+            [['historia', 'comentarios'], 'default', 'value' => null],
             [['categoria_id'], 'integer'],
             [['created_at'], 'safe'],
             [['titulo'], 'string', 'max' => 255],
@@ -89,6 +89,20 @@ class Recetas extends \yii\db\ActiveRecord
         $ruta = Yii::$app->basePath . '/web/images/recetas/' . $id . '.' . $this->foto->extension;
         $res = $this->foto->saveAs($ruta);
         return $res;
+    }
+
+    /**
+     * Devuelve la imagen de la receta si existe
+     * @return bool|string La ruta o false si no existe la imagen
+     */
+    public function getRutaImagen () {
+        $rutaBase = Yii::$app->basePath . '/web/images/recetas/receta';
+        if (file_exists($rutaBase . $this->id . '.jpg')) {
+            $ruta = '@web/images/recetas/receta' . $this->id . '.jpg';
+        } else {
+            $ruta = false;
+        }
+        return $ruta;
     }
 
     /**
