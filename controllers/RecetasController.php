@@ -9,7 +9,6 @@ use app\models\Pasos;
 use app\models\RecetasSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 use yii\base\Model;
@@ -26,12 +25,6 @@ class RecetasController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['index', 'view', 'create', 'update', 'delete'],
@@ -162,9 +155,45 @@ class RecetasController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $receta = $this->findModel($id);
+        if ($receta->usuario_id != Yii::$app->user->id) {
+            return $this->goHome();
+        }
+        $recetaId = $receta->id;
+        $pasos = $receta->pasos;
+        $nPasos = count($pasos);
+        $transaction = Yii::$app->db->beginTransaction();
 
-        return $this->redirect(['index']);
+        try {
+            foreach ($pasos as $paso) {
+                if ($paso->delete() === false) {
+                    throw new Exception();
+                }
+            }
+            if ($receta->delete() === false) {
+                throw new Exception();
+            }
+            $transaction->commit();
+
+            Yii::$app->session->setFlash('success','La receta se ha borrado correctamente');
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            Yii::$app->session->setFlash('danger','Ha ocurrido un error al borrar la Receta');
+        }
+
+        $rutaReceta = Yii::$app->basePath . '/web/images/recetas/receta' . $recetaId . '.jpg';
+        if (file_exists($rutaReceta)) {
+            unlink($rutaReceta);
+        }
+        $rutaPaso = Yii::$app->basePath . '/web/images/pasos/paso-';
+        for ($i = 0; $i < $nPasos; $i++) {
+            $ruta = $rutaPaso . $recetaId . '-' . $i . '.jpg';
+            if (file_exists($ruta)) {
+                unlink($ruta);
+            }
+        }
+
+        return $this->goHome();
     }
 
     /**
