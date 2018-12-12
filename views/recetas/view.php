@@ -17,10 +17,19 @@ $rutaAvatar = $usuario->rutaAvatar;
 $numPasos = count($model->pasos);
 $ruta = $model->rutaImagen;
 
-echo Dialog::widget();
+echo Dialog::widget([
+        'dialogDefaults' => [
+            Dialog::DIALOG_CONFIRM => [
+                'type' => Dialog::TYPE_DANGER,
+//                'title' => Yii::t('kvdialog', 'Confirmation'),
+                'btnOKClass' => 'btn-danger',
+//                'btnOKLabel' => Dialog::ICON_OK . ' ' . Yii::t('kvdialog', 'Ok'),
+//                'btnCancelLabel' => Dialog::ICON_CANCEL . ' ' . Yii::t('kvdialog', 'Cancel')
+            ],
+        ]
+]);
 $js = <<<JS
     $('.borrar').on('click', function(e) {
-        console.log('aqui');
         e.preventDefault();
         krajeeDialog.confirm("¿Estás seguro que quiere borrar esta receta?", function (result) {
             if (result) {

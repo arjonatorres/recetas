@@ -19,7 +19,7 @@ class RecetasSearch extends Recetas
     {
         return [
             [['id', 'categoria_id', 'usuario_id'], 'integer'],
-            [['titulo', 'historia', 'ingredientes', 'pie', 'created_at'], 'safe'],
+            [['titulo', 'historia', 'ingredientes', 'comentarios', 'created_at'], 'safe'],
             [['comensales'], 'number'],
         ];
     }
@@ -70,7 +70,7 @@ class RecetasSearch extends Recetas
         $query->andFilterWhere(['ilike', 'titulo', $this->titulo])
             ->andFilterWhere(['ilike', 'historia', $this->historia])
             ->andFilterWhere(['ilike', 'ingredientes', $this->ingredientes])
-            ->andFilterWhere(['ilike', 'pie', $this->pie]);
+            ->andFilterWhere(['ilike', 'comentarios', $this->comentarios]);
 
         return $dataProvider;
     }
