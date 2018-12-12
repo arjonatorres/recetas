@@ -77,7 +77,7 @@ class Pasos extends \yii\db\ActiveRecord
     /**
      * Devuelve la imagen del paso si existe
      * @param $id_receta   El id de la receta
-     * @param $id_paso     El id del paso
+     * @param $id_paso     La posición del paso
      * @return bool|string La ruta o false si no existe la imagen
      */
     public function getRutaImagen ($id_receta, $id_paso) {
@@ -88,6 +88,24 @@ class Pasos extends \yii\db\ActiveRecord
             $ruta = false;
         }
         return $ruta;
+    }
+
+    /**
+     * Devuelve la imagen local del paso
+     * @param $id_receta   El id de la receta
+     * @param $id_paso     La posición del paso
+     * @return bool|string
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getRutaPaso($id_receta, $id_paso)
+    {
+        $id = $this->id;
+
+        $ruta = 'images/pasos/paso-' . $id_receta . '-' . $id_paso . '.jpg';
+        if (file_exists($ruta)) {
+            return $ruta;
+        }
+        return false;
     }
 
     /**

@@ -106,6 +106,22 @@ class Recetas extends \yii\db\ActiveRecord
     }
 
     /**
+     * Devuelve la imagen local de la receta
+     * @return bool|string
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getRutaReceta()
+    {
+        $id = $this->id;
+
+        $ruta = 'images/recetas/receta' . $id . '.jpg';
+        if (file_exists($ruta)) {
+            return $ruta;
+        }
+        return false;
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getPasos()

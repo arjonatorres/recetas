@@ -136,6 +136,12 @@ class RecetasController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        if ($model->usuario_id != Yii::$app->user->id) {
+            return $this->goHome();
+        }
+
+        $pasos = Pasos::findAll(['receta_id' => $model->id]);
+        $categorias = Categorias::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -143,6 +149,8 @@ class RecetasController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'categorias' => $categorias,
+            'pasos' => $pasos,
         ]);
     }
 
