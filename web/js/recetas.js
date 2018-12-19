@@ -10,7 +10,31 @@ $('textarea').trigger('input');
 pasoActual = $('.field-pasos-texto');
 divNuevo = '';
 var pasoRef = pasoActual.clone();
-var contador = 0;
+var contador = $('.pasos').length - 1;
+if (contador >= 1) {
+    $('.btn-borrar-paso').show();
+}
+divNuevo = $('.entorno-paso-' + (contador+1));
+
+$('.col-md-5').on('click', '.fileinput-remove', function () {
+    var divPadre = $(this).parents('.col-md-5');
+    idInput = divPadre.find('input[type=file]').attr('id');
+    var inputHidden = $("<input>", {
+        'name': idInput,
+        'type': 'hidden'
+    });
+    divPadre.append(inputHidden);
+});
+
+$('.field-recetas-foto').on('click', '.fileinput-remove', function () {
+    var divPadre = $(this).parents('.field-recetas-foto');
+    idInput = divPadre.find('input[type=file]').attr('id');
+    var inputHidden = $("<input>", {
+        'name': idInput,
+        'type': 'hidden'
+    });
+    divPadre.append(inputHidden);
+});
 
 $('.btn-anadir-paso').on('click', function() {
     // if(pasoActual.find('textarea').val() == '') {
