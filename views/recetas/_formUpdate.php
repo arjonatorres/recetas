@@ -30,7 +30,7 @@ $categorias = UtilHelper::getDropDownList($categorias);
 ?>
     <div class="panel panel-success panel-principal">
         <div class="panel-heading panel-heading-principal">
-            <h3 class="panel-title">Nueva Receta</h3>
+            <h3 class="panel-title">Editar Receta</h3>
         </div>
         <div class="panel-body panel-body-gris">
             <div class="recetas-form">
@@ -44,6 +44,8 @@ $categorias = UtilHelper::getDropDownList($categorias);
                     'language' => 'es',
                     'pluginOptions' => [
                         'browseOnZoneClick' => true,
+                        'initialPreview' => $model->rutaReceta,
+                        'initialPreviewAsData' => true,
                         'dropZoneTitle' => 'Sube la foto de tu receta',
                         'dropZoneClickTitle' => '',
                         'showPreview' => true,
@@ -91,39 +93,47 @@ $categorias = UtilHelper::getDropDownList($categorias);
 
                 <h5><b>Pasos</b></h5>
 
-                <div class="entorno-paso-1">
-                    <?= $form->field($pasos, 'texto', ['options' => ['class' => 'pasos']])->textarea(
-                        [
-                            'rows' => 4,
-                            'name' => 'Pasos[0]',
-                            'placeholder' => 'Describe cómo lo hiciste...',
-                            'style' => 'resize:none',
-                        ]
-                    )->label(
-                        '<h3 style="display:inline"><span class="label label-default">1</span></h3>', ['style' => 'margin-bottom: 20px']
-                    ) ?>
-                    <div class="row paso-foto-1">
-                        <div class="col-md-5">
-                            <?= $form->field($pasos, 'foto')->widget(FileInput::classname(), [
-                                'options' => [
-                                    'accept' => 'image/jpeg',
-                                    'name' => 'Pasos[foto0]',
-                                ],
-                                'language' => 'es',
-                                'pluginOptions' => [
-                                    'browseOnZoneClick' => true,
-                                    'dropZoneTitle' => 'Sube la foto del paso',
-                                    'dropZoneClickTitle' => '',
-                                    'showPreview' => true,
-                                    'showCaption' => false,
-                                    'showRemove' => false,
-                                    'showUpload' => false,
-                                    'showBrowse' => false,
-                                ]
-                            ])->label(false); ?>
+                <?php
+                foreach ($pasos as $i => $paso) { ?>
+                    <div class="entorno-paso-<?= ($i+1) ?>">
+                        <?= $form->field($paso, 'texto', ['options' => ['class' => 'pasos']])->textarea(
+                            [
+                                'id' => 'pasos-texto' . ($i != 0 ? '-' . $i: ''),
+                                'rows' => 4,
+                                'name' => 'Pasos['. $i . ']',
+                                'placeholder' => 'Describe cómo lo hiciste...',
+                                'style' => 'resize:none',
+                            ]
+                        )->label(
+                            '<h3 style="display:inline"><span class="label label-default">' . ($i+1) . '</span></h3>', ['style' => 'margin-bottom: 20px']
+                        ) ?>
+                        <div class="row paso-foto-<?= ($i+1) ?>">
+                            <div class="col-md-5">
+                                <?= $form->field($paso, 'foto')->widget(FileInput::classname(), [
+                                    'options' => [
+                                        'id' => 'pasos-foto' . ($i != 0 ? '-' . $i: ''),
+                                        'accept' => 'image/jpeg',
+                                        'name' => 'Pasos[foto'. $i . ']',
+                                    ],
+                                    'language' => 'es',
+                                    'pluginOptions' => [
+                                        'browseOnZoneClick' => true,
+                                        'initialPreview' => $paso->getRutaPaso($model->id, $i),
+                                        'initialPreviewAsData' => true,
+                                        'dropZoneTitle' => 'Sube la foto del paso',
+                                        'dropZoneClickTitle' => '',
+                                        'showPreview' => true,
+                                        'showCaption' => false,
+                                        'showRemove' => false,
+                                        'showUpload' => false,
+                                        'showBrowse' => false,
+                                    ]
+                                ])->label(false); ?>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php } ?>
+
 
                 <?= Html::button('+ Añadir Paso', ['class' => 'btn btn-warning btn-xs btn-anadir-paso']) ?>
                 <?= Html::button('- Borrar Paso', ['class' => 'btn btn-danger btn-xs btn-borrar-paso', 'style' => 'display:none']) ?>

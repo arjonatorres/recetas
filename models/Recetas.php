@@ -80,13 +80,16 @@ class Recetas extends \yii\db\ActiveRecord
      * Guarda fotos
      * @return bool Si se ha efectuado la subida correctamente.
      */
-    public function upload()
+    public function upload($delete = false)
     {
+        $id = 'receta' . $this->id;
+        $ruta = Yii::$app->basePath . '/web/images/recetas/' . $id . '.jpg';
         if ($this->foto === null) {
+            if ($delete) {
+                unlink($ruta);
+            }
             return true;
         }
-        $id = 'receta' . $this->id;
-        $ruta = Yii::$app->basePath . '/web/images/recetas/' . $id . '.' . $this->foto->extension;
         $res = $this->foto->saveAs($ruta);
         return $res;
     }
@@ -103,6 +106,22 @@ class Recetas extends \yii\db\ActiveRecord
             $ruta = false;
         }
         return $ruta;
+    }
+
+    /**
+     * Devuelve la imagen local de la receta
+     * @return bool|string
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getRutaReceta()
+    {
+        $id = $this->id;
+
+        $ruta = 'images/recetas/receta' . $id . '.jpg';
+        if (file_exists($ruta)) {
+            return $ruta;
+        }
+        return false;
     }
 
     /**

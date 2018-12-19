@@ -60,16 +60,20 @@ class Pasos extends \yii\db\ActiveRecord
 
     /**
      * Guarda fotos
-     * @param $i    El número de paso
+     * @param $i      El número de paso
+     * @param $delete Booleano si hay que borrar la foto
      * @return bool Si se ha efectuado la subida correctamente.
      */
-    public function upload($i)
+    public function upload($i, $delete = false)
     {
+        $id = 'paso-' . $this->receta_id . '-' . $i;
+        $ruta = Yii::$app->basePath . '/web/images/pasos/' . $id . '.jpg';
         if ($this->foto === null) {
+            if ($delete) {
+                unlink($ruta);
+            }
             return true;
         }
-        $id = 'paso-' . $this->receta_id . '-' . $i;
-        $ruta = Yii::$app->basePath . '/web/images/pasos/' . $id . '.' . $this->foto->extension;
         $res = $this->foto->saveAs($ruta);
         return $res;
     }
@@ -77,7 +81,7 @@ class Pasos extends \yii\db\ActiveRecord
     /**
      * Devuelve la imagen del paso si existe
      * @param $id_receta   El id de la receta
-     * @param $id_paso     El id del paso
+     * @param $id_paso     La posición del paso
      * @return bool|string La ruta o false si no existe la imagen
      */
     public function getRutaImagen ($id_receta, $id_paso) {
@@ -88,6 +92,24 @@ class Pasos extends \yii\db\ActiveRecord
             $ruta = false;
         }
         return $ruta;
+    }
+
+    /**
+     * Devuelve la imagen local del paso
+     * @param $id_receta   El id de la receta
+     * @param $id_paso     La posición del paso
+     * @return bool|string
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getRutaPaso($id_receta, $id_paso)
+    {
+        $id = $this->id;
+
+        $ruta = 'images/pasos/paso-' . $id_receta . '-' . $id_paso . '.jpg';
+        if (file_exists($ruta)) {
+            return $ruta;
+        }
+        return false;
     }
 
     /**
