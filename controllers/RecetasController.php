@@ -143,8 +143,69 @@ class RecetasController extends Controller
         $pasos = Pasos::findAll(['receta_id' => $model->id]);
         $categorias = Categorias::find()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (Yii::$app->request->isPost) {
+
+            $numPasosActual = 0;
+            $model->load(Yii::$app->request->post());
+            foreach (Yii::$app->request->post('Pasos') as $i => $data) {
+                if (preg_match('/^foto/', $i) == 1) {
+                    continue;
+                }
+                if (isset($pasos[$i])) {
+                    $newPasos = $pasos[$i];
+                } else {
+                    $newPasos = new Pasos();
+                }
+                $newPasos->texto = $data;
+                $newPasos->foto = UploadedFile::getInstance($newPasos, 'foto' . $i);
+                $pasosArray[$i] = $newPasos;
+                $numPasosActual++;
+            }
+
+            $numPasos = count($pasos);
+
+            $transaction = Yii::$app->db->beginTransaction();
+
+            try {
+                $valid = $model->validate();
+                $valid = Model::validateMultiple($pasosArray, ['texto']) && $valid;
+                if ($valid) {
+                    $model->foto = UploadedFile::getInstance($model, 'foto');
+                    $model->save(false);
+                    foreach ($pasosArray as $i => $newPasos) {
+                        $newPasos->receta_id = $model->id;
+                        $idHiddenFotoPaso = ($i == 0) ? 'pasos-foto' : 'pasos-foto-' . $i;
+                        $deleteFotoPaso = isset($_POST[$idHiddenFotoPaso]);
+
+                        if ($newPasos->upload($i, $deleteFotoPaso)) {
+                            $newPasos->save(false);
+                        } else {
+                            throw new Exception();
+                        }
+                    }
+                    for ($i = 1; $i <= ($numPasos - $numPasosActual); $i++) {
+                        $pasoSobra = $pasos[($numPasos - $i)];
+                        if ($pasoSobra->upload(($numPasos - $i), true)) {
+                            $pasoSobra->delete();
+                        } else {
+                            throw new Exception();
+                        }
+                    }
+                    $deleteFotoReceta = isset($_POST['recetas-foto']);
+                    if ($model->upload($deleteFotoReceta)) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    } else {
+                        throw new Exception();
+                    }
+                } else {
+                    throw new Exception();
+                }
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('danger','Ha ocurrido un error al editar la Receta');
+                return $this->goHome();
+            }
         }
 
         return $this->render('update', [

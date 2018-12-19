@@ -60,16 +60,20 @@ class Pasos extends \yii\db\ActiveRecord
 
     /**
      * Guarda fotos
-     * @param $i    El número de paso
+     * @param $i      El número de paso
+     * @param $delete Booleano si hay que borrar la foto
      * @return bool Si se ha efectuado la subida correctamente.
      */
-    public function upload($i)
+    public function upload($i, $delete = false)
     {
+        $id = 'paso-' . $this->receta_id . '-' . $i;
+        $ruta = Yii::$app->basePath . '/web/images/pasos/' . $id . '.jpg';
         if ($this->foto === null) {
+            if ($delete) {
+                unlink($ruta);
+            }
             return true;
         }
-        $id = 'paso-' . $this->receta_id . '-' . $i;
-        $ruta = Yii::$app->basePath . '/web/images/pasos/' . $id . '.' . $this->foto->extension;
         $res = $this->foto->saveAs($ruta);
         return $res;
     }

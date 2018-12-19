@@ -18,6 +18,14 @@ $this->registerJsFile('@web/js/recetas.js', [
 $this->registerCssFile('@web/css/recetas.css', [
         'depends' => [\yii\bootstrap\BootstrapAsset::className(), \yii\web\YiiAsset::className()],
 ]);
+echo Dialog::widget([
+    'dialogDefaults' => [
+        Dialog::DIALOG_CONFIRM => [
+            'type' => Dialog::TYPE_DANGER,
+            'btnOKClass' => 'btn-danger',
+        ],
+    ]
+]);
 $categorias = UtilHelper::getDropDownList($categorias);
 ?>
     <div class="panel panel-success panel-principal">
