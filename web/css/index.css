@@ -1,0 +1,20 @@
+.panel-body-gris {
+    padding: 0px;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.panel-heading-principal {
+    border-radius: 0px 0px 5px 5px;
+}
+
+.cuadriculas {
+    margin: 0px;
+}
+
+.panel-principal{
+    border-radius: 5px 5px 5px 5px;
+}
+
+img {
+    border-radius: 5px 5px 0px 0px;
+}

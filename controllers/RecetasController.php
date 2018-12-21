@@ -44,13 +44,7 @@ class RecetasController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new RecetasSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->redirect(['site/index']);
     }
 
     /**
@@ -90,10 +84,10 @@ class RecetasController extends Controller
             $transaction = Yii::$app->db->beginTransaction();
 
             try {
+                $recetas->foto = UploadedFile::getInstance($recetas, 'foto');
                 $valid = $recetas->validate();
                 $valid = Model::validateMultiple($pasosArray, ['texto']) && $valid;
                 if ($valid) {
-                    $recetas->foto = UploadedFile::getInstance($recetas, 'foto');
                     $recetas->save(false);
                     foreach ($pasosArray as $i => $newPasos) {
                         $newPasos->receta_id = $recetas->id;
@@ -167,10 +161,10 @@ class RecetasController extends Controller
             $transaction = Yii::$app->db->beginTransaction();
 
             try {
+                $model->foto = UploadedFile::getInstance($model, 'foto');
                 $valid = $model->validate();
                 $valid = Model::validateMultiple($pasosArray, ['texto']) && $valid;
                 if ($valid) {
-                    $model->foto = UploadedFile::getInstance($model, 'foto');
                     $model->save(false);
                     foreach ($pasosArray as $i => $newPasos) {
                         $newPasos->receta_id = $model->id;
