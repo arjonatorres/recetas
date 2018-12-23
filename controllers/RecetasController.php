@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Dificultades;
 use Yii;
 use app\models\Recetas;
 use app\models\Categorias;
@@ -44,13 +45,7 @@ class RecetasController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new RecetasSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->redirect(['site/index']);
     }
 
     /**
@@ -76,6 +71,7 @@ class RecetasController extends Controller
         $recetas = new Recetas(['usuario_id' => Yii::$app->user->id]);
         $pasos = new Pasos();
         $categorias = Categorias::find()->all();
+        $dificultades = Dificultades::find()->all();
         if (Yii::$app->request->isPost) {
             $recetas->load(Yii::$app->request->post());
             foreach (Yii::$app->request->post('Pasos') as $i => $data) {
@@ -90,10 +86,10 @@ class RecetasController extends Controller
             $transaction = Yii::$app->db->beginTransaction();
 
             try {
+                $recetas->foto = UploadedFile::getInstance($recetas, 'foto');
                 $valid = $recetas->validate();
                 $valid = Model::validateMultiple($pasosArray, ['texto']) && $valid;
                 if ($valid) {
-                    $recetas->foto = UploadedFile::getInstance($recetas, 'foto');
                     $recetas->save(false);
                     foreach ($pasosArray as $i => $newPasos) {
                         $newPasos->receta_id = $recetas->id;
@@ -122,6 +118,7 @@ class RecetasController extends Controller
         return $this->render('create', [
             'model' => $recetas,
             'categorias' => $categorias,
+            'dificultades' => $dificultades,
             'pasos' => $pasos,
         ]);
     }
@@ -142,6 +139,7 @@ class RecetasController extends Controller
 
         $pasos = Pasos::findAll(['receta_id' => $model->id]);
         $categorias = Categorias::find()->all();
+        $dificultades = Dificultades::find()->all();
 
         if (Yii::$app->request->isPost) {
 
@@ -167,10 +165,10 @@ class RecetasController extends Controller
             $transaction = Yii::$app->db->beginTransaction();
 
             try {
+                $model->foto = UploadedFile::getInstance($model, 'foto');
                 $valid = $model->validate();
                 $valid = Model::validateMultiple($pasosArray, ['texto']) && $valid;
                 if ($valid) {
-                    $model->foto = UploadedFile::getInstance($model, 'foto');
                     $model->save(false);
                     foreach ($pasosArray as $i => $newPasos) {
                         $newPasos->receta_id = $model->id;
@@ -211,6 +209,7 @@ class RecetasController extends Controller
         return $this->render('update', [
             'model' => $model,
             'categorias' => $categorias,
+            'dificultades' => $dificultades,
             'pasos' => $pasos,
         ]);
     }

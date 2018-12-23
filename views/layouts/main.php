@@ -33,7 +33,7 @@ AppAsset::register($this);
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'my-navbar navbar-fixed-top',
+            'class' => 'navbar navbar-default my-navbar navbar-fixed-top',
         ],
     ]);
 
@@ -56,14 +56,14 @@ AppAsset::register($this);
             ],
         ];
         $menuCasa = [
-            'label' => '',
+//            'label' => '',
 //            UtilHelper::menuItem('Blog', 'book', 'posts/index'),
         ];
     } else {
         $menuCasa = [
-            [
-                'label' => '',
-            ],
+//            [
+//                'label' => '',
+//            ],
         ];
         $usuario = Yii::$app->user->identity;
         $ruta = $usuario->rutaAvatar;

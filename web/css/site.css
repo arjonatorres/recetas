@@ -8,9 +8,9 @@ body {
     height: auto;
     margin: 0 auto -60px;
     padding: 0 0 60px;
-    /*background-color: #fafafa;*/
+    background-color: #EBECEC;
     /*background-color: #f6fbf4;*/
-    background-color: #fff;
+    /*background-color: #fff;*/
 }
 
 .wrap > .container {
@@ -19,8 +19,8 @@ body {
 
 .footer {
     height: 60px;
-    /*background-color: #ddd;*/
-    background-color: #ebf5e6;
+    background-color: #fff;
+    /*background-color: #ebf5e6;*/
     border-top: 1px solid #ddd;
     padding-top: 20px;
 }
@@ -120,10 +120,10 @@ a.desc:after {
 
 .my-navbar {
     border-bottom: 1px solid #ddd;
-    /*background-color: #fff;*/
+    background-color: #fff;
     /*background-color: #dff0d8;*/
     /*background-color: #ebf5e6;*/
-    background-color: #f6fbf4;
+    /*background-color: #f6fbf4;*/
 }
 
 .file-input > .file-preview {
@@ -148,5 +148,9 @@ a.desc:after {
 }
 
 .panel-body {
-    background-color: #f6fbf4;
+    /*background-color: #f6fbf4;*/
+}
+
+.panel {
+    color: #009A3D;
 }

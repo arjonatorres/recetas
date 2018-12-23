@@ -14,6 +14,7 @@ $this->title = 'Nueva Receta';
             <?= $this->render('_form', [
                 'model' => $model,
                 'categorias' => $categorias,
+                'dificultades' => $dificultades,
                 'pasos' => $pasos,
             ]) ?>
         </div>

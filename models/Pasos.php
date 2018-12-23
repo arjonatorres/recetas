@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\imagine\Image;
 
 /**
  * This is the model class for table "pasos".
@@ -75,6 +76,9 @@ class Pasos extends \yii\db\ActiveRecord
             return true;
         }
         $res = $this->foto->saveAs($ruta);
+        if ($res) {
+            Image::thumbnail($ruta, 1024, 768)->save($ruta, ['quality' => 80]);
+        }
         return $res;
     }
 
