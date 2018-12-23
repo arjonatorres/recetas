@@ -27,6 +27,7 @@ echo Dialog::widget([
     ]
 ]);
 $categorias = UtilHelper::getDropDownList($categorias);
+$dificultades = UtilHelper::getDropDownList($dificultades);
 ?>
     <div class="panel panel-success panel-principal">
         <div class="panel-heading panel-heading-principal">
@@ -77,7 +78,7 @@ $categorias = UtilHelper::getDropDownList($categorias);
                     ]
                 ) ?>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <?= $form->field($model, 'comensales')->textInput(
                             [
                                 'type' => 'number',
@@ -86,8 +87,17 @@ $categorias = UtilHelper::getDropDownList($categorias);
                             ]
                         ) ?>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <?=$form->field($model, 'categoria_id')->dropDownList($categorias, ['prompt' => 'Seleccione Uno' ]); ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?=$form->field($model, 'dificultad_id')->dropDownList($dificultades, ['prompt' => 'Seleccione Uno' ]); ?>
+                    </div>
+                    <div class="col-md-2">
+                        <?= $form->field($model, 'tiempo')->textInput([
+                            'maxlength' => true,
+                            'placeholder' => '30min',
+                        ]) ?>
                     </div>
                 </div>
 

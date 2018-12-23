@@ -59,7 +59,7 @@ class RecetasSearch extends Recetas
         }
 
         $dataProvider->sort = ['defaultOrder' => ['created_at' => SORT_ASC]];
-        $dataProvider->pagination->pageSize = 9;
+        $dataProvider->pagination->pageSize = 12;
 
         // grid filtering conditions
         $query->andFilterWhere([

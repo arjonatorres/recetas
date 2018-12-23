@@ -14,12 +14,15 @@ use yii\imagine\Image;
  * @property string $ingredientes
  * @property string $comensales
  * @property string $comentarios
+ * @property string $tiempo
  * @property int $categoria_id
+ * @property int $dificultad_id
  * @property int $usuario_id
  * @property string $created_at
  *
  * @property Pasos[] $pasos
  * @property Categorias $categoria
+ * @property Dificultades $dificultad
  * @property Usuarios $usuario
  */
 class Recetas extends \yii\db\ActiveRecord
@@ -44,14 +47,16 @@ class Recetas extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['titulo', 'ingredientes', 'categoria_id', 'comensales', 'foto'], 'required'],
+            [['titulo', 'ingredientes', 'categoria_id', 'dificultad_id', 'comensales'], 'required'],
             [['comensales'], 'number'],
-            [['historia', 'comentarios'], 'default', 'value' => null],
-            [['categoria_id'], 'integer'],
+            [['historia', 'dificultad_id', 'comentarios'], 'default', 'value' => null],
+            [['categoria_id', 'dificultad_id'], 'integer'],
             [['created_at'], 'safe'],
             [['titulo'], 'string', 'max' => 255],
             [['historia', 'ingredientes', 'comentarios'], 'string', 'max' => 10000],
+            [['tiempo'], 'string', 'max' => 10],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::className(), 'targetAttribute' => ['categoria_id' => 'id']],
+            [['dificultad_id'], 'exist', 'skipOnError' => true, 'targetClass' => Dificultades::className(), 'targetAttribute' => ['dificultad_id' => 'id']],
             [['!usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
             [['foto'], 'file', 'extensions' => 'jpg, png'],
             [['foto'], 'file', 'maxSize' => 1024 * 1024 * 8, 'message' => 'La foto principal tiene que ser menor de 8MB'],
@@ -69,8 +74,10 @@ class Recetas extends \yii\db\ActiveRecord
             'historia' => 'Historia',
             'ingredientes' => 'Ingredientes',
             'comensales' => 'Comensales',
+            'tiempo' => 'Tiempo',
             'comentarios' => 'Comentarios',
             'categoria_id' => 'Categoria',
+            'dificultad_id' => 'Dificultad',
             'usuario_id' => 'Usuario ID',
             'created_at' => 'Created At',
             'foto' => 'Foto principal'
@@ -142,6 +149,14 @@ class Recetas extends \yii\db\ActiveRecord
     public function getCategoria()
     {
         return $this->hasOne(Categorias::className(), ['id' => 'categoria_id'])->inverseOf('recetas');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDificultad()
+    {
+        return $this->hasOne(Dificultades::className(), ['id' => 'dificultad_id'])->inverseOf('recetas');
     }
 
     /**

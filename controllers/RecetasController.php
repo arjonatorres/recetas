@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Dificultades;
 use Yii;
 use app\models\Recetas;
 use app\models\Categorias;
@@ -70,6 +71,7 @@ class RecetasController extends Controller
         $recetas = new Recetas(['usuario_id' => Yii::$app->user->id]);
         $pasos = new Pasos();
         $categorias = Categorias::find()->all();
+        $dificultades = Dificultades::find()->all();
         if (Yii::$app->request->isPost) {
             $recetas->load(Yii::$app->request->post());
             foreach (Yii::$app->request->post('Pasos') as $i => $data) {
@@ -116,6 +118,7 @@ class RecetasController extends Controller
         return $this->render('create', [
             'model' => $recetas,
             'categorias' => $categorias,
+            'dificultades' => $dificultades,
             'pasos' => $pasos,
         ]);
     }
@@ -136,6 +139,7 @@ class RecetasController extends Controller
 
         $pasos = Pasos::findAll(['receta_id' => $model->id]);
         $categorias = Categorias::find()->all();
+        $dificultades = Dificultades::find()->all();
 
         if (Yii::$app->request->isPost) {
 
@@ -205,6 +209,7 @@ class RecetasController extends Controller
         return $this->render('update', [
             'model' => $model,
             'categorias' => $categorias,
+            'dificultades' => $dificultades,
             'pasos' => $pasos,
         ]);
     }

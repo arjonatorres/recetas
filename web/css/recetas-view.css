@@ -1,5 +1,5 @@
 .titulo {
-    color: #458A45;
+    color: #009A3D;
     font-weight: bold;
     margin-top: 20px;
     display: table-cell;
@@ -28,7 +28,7 @@
 
 .fecha {
     display: table-cell;
-    color: #458A45;
+    color: #009A3D;
     font-weight: normal;
     font-size: 14px;
     white-space: nowrap;
@@ -64,4 +64,28 @@
 
 .categoria {
     margin-top: 10px;
+}
+
+.panel-body {
+    color: #000;
+}
+
+.iconos {
+    /*border: 1px solid black;*/
+    padding: 0px;
+    margin-bottom: 10px;
+    color: #b1b1b1;
+    font-size: 0.85em;
+}
+
+p.text-center {
+    margin: 0px;
+}
+
+.icono-imagen > .img-responsive {
+    margin: 0 auto;
+}
+
+.row {
+    margin: 0px;
 }

@@ -21,6 +21,13 @@ CREATE TABLE categorias
     nombre  VARCHAR(255)
 );
 
+DROP TABLE IF EXISTS dificultades CASCADE;
+CREATE TABLE dificultades
+(
+    id      BIGSERIAL    PRIMARY KEY,
+    nombre  VARCHAR(255)
+);
+
 DROP TABLE IF EXISTS recetas CASCADE;
 CREATE TABLE recetas
 (
@@ -30,7 +37,10 @@ CREATE TABLE recetas
   , ingredientes varchar(10000) NOT NULL
   , comensales   numeric(2)
   , comentarios  varchar(10000)
+  , tiempo       varchar(10)
   , categoria_id bigint         NOT NULL REFERENCES categorias (id)
+                                ON DELETE NO ACTION ON UPDATE CASCADE
+  , dificultad_id bigint        NOT NULL REFERENCES dificultades (id)
                                 ON DELETE NO ACTION ON UPDATE CASCADE
   , usuario_id   bigint         NOT NULL REFERENCES usuarios (id)
                                 ON DELETE NO ACTION ON UPDATE CASCADE
@@ -70,3 +80,8 @@ INSERT INTO categorias (nombre)
             ('Salsas'),
             ('Sopas y cremas'),
             ('Verduras');
+
+INSERT INTO dificultades (nombre)
+     VALUES ('Fácil'),
+            ('Media'),
+            ('Difícil');
