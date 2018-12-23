@@ -12,7 +12,7 @@ $this->title = 'Modificar un usuario';
 <div class="usuarios-update">
 
     <div class="col-md-6 col-md-offset-3">
-        <div class="panel panel-success panel-principal">
+        <div class="panel panel-default panel-principal">
             <div class="panel-heading panel-heading-principal">
                 <h3 class="panel-title">Configuración de la cuenta</h3>
             </div>
