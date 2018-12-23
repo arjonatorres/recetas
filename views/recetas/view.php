@@ -116,7 +116,7 @@ $this->registerJs($js, View::POS_END);
                     <div class="comensales">
                         <h4>Para <?= $model->comensales ?> persona<?= $model->comensales != 1 ? 's' : ''?></h4>
                     </div>
-                    <?= Html::encode($model->ingredientes) ?>
+                    <?= nl2br(Html::encode($model->ingredientes)) ?>
                 </div>
 
                 <div class="col-md-12">
@@ -124,7 +124,7 @@ $this->registerJs($js, View::POS_END);
                     <?php foreach ($model->pasos as $i => $paso) { ?>
                         <div class="<?= ($i+1) != $numPasos ? 'pasos ': 'margin10 ' ?>paso<?=($i+1)?>">
                             <h4><span class="label label-default"><?=($i+1)?></span></h4>
-                            <span class="paso-texto"><?= $paso->texto ?></span>
+                            <span class="paso-texto"><?= nl2br(Html::encode($paso->texto)) ?></span>
                             <?php
                             $ruta = $paso->getRutaImagen($model->id, $i);
                             if ($ruta) { ?>
@@ -163,7 +163,7 @@ $this->registerJs($js, View::POS_END);
                 <?php if (isset($model->comentarios)) { ?>
                     <div class="col-md-12 margin20">
                         <h3 class="encabezados">Comentarios</h3>
-                        <span><?= Html::encode($model->comentarios) ?></span>
+                        <span><?= nl2br(Html::encode($model->comentarios)) ?></span>
                     </div>
                 <?php } ?>
 
