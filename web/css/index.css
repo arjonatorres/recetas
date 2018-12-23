@@ -1,0 +1,45 @@
+.panel-body-gris {
+    padding: 0px;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.panel-heading-principal {
+    border-radius: 0px 0px 5px 5px;
+}
+
+.cuadriculas {
+    margin: 0px;
+}
+
+.panel-principal{
+    border-radius: 5px 5px 5px 5px;
+}
+
+img {
+    border-radius: 5px 5px 0px 0px;
+}
+
+.panel {
+    border: 0px;
+    font-weight: bold;
+}
+
+.panel h3 {
+    font-weight: bold;
+}
+
+.iconos {
+    /*border: 1px solid black;*/
+    padding: 0px;
+    margin-top: 10px;
+    color: #b1b1b1;
+    font-size: 0.85em;
+}
+
+p.text-center {
+    margin: 0px;
+}
+
+.icono-imagen > .img-responsive {
+    margin: 0 auto;
+}

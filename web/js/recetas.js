@@ -135,3 +135,17 @@ $('.btn-borrar-paso').on('click', function() {
         }
     });
 });
+
+$('button[type="submit"]').on('click', function(e) {
+    e.preventDefault();
+    if ($('.field-recetas-foto').find('img').length > 0){
+        $('.field-recetas-foto').removeClass('has-error');
+        $('.field-recetas-foto').addClass('has-success');
+        $('#form').submit();
+    } else {
+        $('.field-recetas-foto').removeClass('has-success');
+        $('.field-recetas-foto').addClass('has-error');
+        $('.field-recetas-foto').find('.help-block').text('Foto principal no puede estar vacío.');
+        $('html, body').animate({scrollTop:0}, 'slow');
+    }
+});

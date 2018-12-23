@@ -14,6 +14,7 @@ $this->title = 'Editar Receta';
             <?= $this->render('_formUpdate', [
                 'model' => $model,
                 'categorias' => $categorias,
+                'dificultades' => $dificultades,
                 'pasos' => $pasos,
             ]) ?>
         </div>

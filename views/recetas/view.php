@@ -42,7 +42,7 @@ $this->registerJs($js, View::POS_END);
 ?>
 <div class="recetas-view">
     <div class="col-md-10 col-md-offset-1">
-        <div class="panel panel-success panel-principal">
+        <div class="panel panel-default panel-principal">
             <div class="panel-body panel-body-view">
                 <?php if ($ruta) { ?>
                     <div class="col-md-12 margin30">
@@ -52,19 +52,57 @@ $this->registerJs($js, View::POS_END);
                     </div>
                 <?php } ?>
 
-                <div class="col-md-12 margin30">
-                    <h1 class="titulo"><?= Html::encode($model->titulo) ?></h1>
-                    <div class="fecha">
-                        <?= Html::encode(Yii::$app->formatter->asDatetime($model->created_at, 'medium')) ?>
+                <div class="row">
+                    <div class="col-md-4 col-xs-8">
+                        <div class="col-md-2 col-xs-3 iconos">
+                            <div class="icono-imagen">
+                                <?= Html::img('@web/images/iconos/reloj.png',
+                                    ['class' => 'img-responsive', 'width' => '50%']
+                                ) ?>
+                            </div>
+                            <p class="text-center"><?= $model->tiempo ?></p>
+                        </div>
+                        <div class="col-md-2 col-xs-3 iconos">
+                            <div class="icono-imagen">
+                                <?= Html::img('@web/images/iconos/gente.png',
+                                    ['class' => 'img-responsive', 'width' => '50%']
+                                ) ?>
+                            </div>
+                            <p class="text-center"><?= $model->comensales ?></p>
+                        </div>
+                        <div class="col-md-2 col-xs-3 iconos">
+                            <div class="icono-imagen">
+                                <?= Html::img('@web/images/iconos/dificultad.png',
+                                    ['class' => 'img-responsive', 'width' => '50%']
+                                ) ?>
+                            </div>
+                            <p class="text-center"><?= $model->dificultad->nombre ?></p>
+                        </div>
+
                     </div>
-                    <h3 class="categoria"><span class="label label-warning"><?= $model->categoria->nombre ?></span></h3>
+                    <div class="col-md-1 col-md-offset-7 col-xs-3 col-xs-offset-1">
+                        <div class="icono-imagen">
+                            <?= Html::img($model->usuario->rutaAvatar,
+                                [
+                                    'class' => 'img-responsive img-circle',
+                                    'width' => '60%',
+                                    'title' => $model->usuario->usuario,
+                                ]
+                            ) ?>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col-md-12 usuario <?= isset($model->historia)? '': 'margin30' ?>">
-                    <?= Html::img($rutaAvatar,
-                        ['class' => 'img-sm img-circle']
-                    ) . ' ' . $usuario->usuario ?>
+                <div class="row">
+                    <div class="col-md-12 margin30">
+                        <h1 class="titulo"><?= Html::encode($model->titulo) ?></h1>
+                        <div class="fecha">
+                            <?= Html::encode(Yii::$app->formatter->asDatetime($model->created_at, 'medium')) ?>
+                        </div>
+                        <h3 class="categoria"><span class="label label-warning"><?= $model->categoria->nombre ?></span></h3>
+                    </div>
                 </div>
+
 
                 <?php if (isset($model->historia)) { ?>
                     <div class="col-md-12 margin30">
