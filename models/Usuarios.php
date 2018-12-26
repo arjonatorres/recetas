@@ -119,8 +119,10 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return $this->hasMany(Recetas::className(), ['usuario_id' => 'id'])->inverseOf('usuario');
     }
 
-    public function getRutaAvatar () {
-        $id = Yii::$app->user->id;
+    public function getRutaAvatar ($id = null) {
+        if ($id == null) {
+            $id = Yii::$app->user->id;
+        }
         $rutaBase = Yii::$app->basePath . '/web/images/avatar/';
         if (file_exists($rutaBase . $id . '.jpg')) {
             $ruta = '@web/images/avatar/' . $id . '.jpg';
@@ -163,7 +165,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
     {
         if (parent::beforeSave($insert)) {
             if ($insert) {
-                $this->auth_key = Yii::$app->security->generateRandomString();
+//                $this->auth_key = Yii::$app->security->generateRandomString();
                 $this->token_val = Yii::$app->security->generateRandomString();
                 if ($this->scenario === self::ESCENARIO_CREATE) {
                     $this->password = Yii::$app->security->generatePasswordHash($this->password);

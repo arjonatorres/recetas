@@ -10,7 +10,7 @@ $link = Url::to(['/recetas/view', 'id' => $model->id]);
             <div class="panel-body panel-body-gris">
                 <div class="recetas-form">
 
-                    <?= Html::img($model->rutaImagen,
+                    <?= Html::img($model->rutaImagen . '?r=' . strtotime($model->updated_at),
                         ['class' => 'img-responsive', 'width' => '100%']
                     ) ?>
 
@@ -46,7 +46,7 @@ $link = Url::to(['/recetas/view', 'id' => $model->id]);
                         </div>
                         <div class="col-md-2 col-xs-2 col-md-offset-4 col-xs-offset-4 iconos">
                             <div class="icono-imagen">
-                                <?= Html::img($model->usuario->rutaAvatar,
+                                <?= Html::img($model->usuario->getRutaAvatar($model->usuario_id),
                                     [
                                         'class' => 'img-responsive img-circle',
                                         'width' => '60%',
