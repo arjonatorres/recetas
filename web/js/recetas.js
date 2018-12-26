@@ -57,6 +57,12 @@ $('.btn-anadir-paso').on('click', function() {
     textArea.attr('id', 'pasos-texto-' + contador);
     textArea.parent().removeClass('field-pasos-texto');
     textArea.parent().addClass('field-pasos-texto-' + contador);
+    textArea.attr('style', 'height:' + (textArea.scrollHeight) + 'px;overflow-y:hidden;');
+    textArea.on('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+        this.style.resize = 'none';
+    });
     pasoNuevo.find('.label'). text(contador+1);
     divNuevo.append(pasoNuevo);
 

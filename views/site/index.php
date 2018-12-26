@@ -5,7 +5,7 @@
 use yii\widgets\ListView;
 use yii\data\ActiveDataProvider;
 
-$this->registerCssFile('@web/css/index.css', [
+$this->registerCssFile('@web/css/index.css?r=20181226', [
     'depends' => [\yii\bootstrap\BootstrapAsset::className(), \yii\web\YiiAsset::className()],
 ]);
 
