@@ -11,11 +11,11 @@ use kartik\dialog\Dialog;
 /* @var $form yii\widgets\ActiveForm */
 
 echo Dialog::widget();
-$this->registerJsFile('@web/js/recetas.js', [
+$this->registerJsFile('@web/js/recetas.js?r=20181226', [
     'depends' => [\yii\web\JqueryAsset::className()],
 ]);
 
-$this->registerCssFile('@web/css/recetas.css', [
+$this->registerCssFile('@web/css/recetas.css?r=20181226', [
         'depends' => [\yii\bootstrap\BootstrapAsset::className(), \yii\web\YiiAsset::className()],
 ]);
 echo Dialog::widget([
