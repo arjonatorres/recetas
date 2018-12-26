@@ -82,7 +82,7 @@ $this->registerJs($js, View::POS_END);
                     </div>
                     <div class="col-md-1 col-md-offset-7 col-xs-3 col-xs-offset-1">
                         <div class="icono-imagen">
-                            <?= Html::img($model->usuario->getRutaAvatar($model->usuario_id),
+                            <?= Html::img($model->usuario->getRutaAvatar($model->usuario_id) . '?r=' . strtotime($model->usuario->updated_at),
                                 [
                                     'class' => 'img-responsive img-circle',
                                     'width' => '60%',

@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\imagine\Image;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "usuarios".
@@ -15,6 +17,7 @@ use yii\imagine\Image;
  * @property string $auth_key
  * @property string $token_val
  * @property string $created_at
+ * @property string $updated_at
  *
  * @property Recetas[] $recetas
  */
@@ -38,6 +41,16 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return 'usuarios';
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'value' => new Expression('NOW()'),
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -55,6 +68,7 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
                 'on' => [self::ESCENARIO_CREATE, self::ESCENARIO_UPDATE],
             ],
             [['token_val'], 'unique'],
+            [['created_at', 'updated_at'], 'safe'],
             [['usuario'], 'unique'],
             [['email'], 'email'],
             [['foto'], 'file', 'extensions' => 'jpg, png'],

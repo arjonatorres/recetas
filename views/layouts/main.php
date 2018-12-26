@@ -66,7 +66,7 @@ AppAsset::register($this);
 //            ],
         ];
         $usuario = Yii::$app->user->identity;
-        $ruta = $usuario->rutaAvatar;
+        $ruta = $usuario->rutaAvatar . '?r=' . strtotime($usuario->updated_at);
 
         $menuItems[] =
             '<li class="menu-item-derecha">'
