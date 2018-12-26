@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\imagine\Image;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "recetas".
@@ -19,6 +21,7 @@ use yii\imagine\Image;
  * @property int $dificultad_id
  * @property int $usuario_id
  * @property string $created_at
+ * @property string $updated_at
  *
  * @property Pasos[] $pasos
  * @property Categorias $categoria
@@ -41,6 +44,16 @@ class Recetas extends \yii\db\ActiveRecord
         return 'recetas';
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'value' => new Expression('NOW()'),
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -51,7 +64,7 @@ class Recetas extends \yii\db\ActiveRecord
             [['comensales'], 'number'],
             [['historia', 'dificultad_id', 'comentarios'], 'default', 'value' => null],
             [['categoria_id', 'dificultad_id'], 'integer'],
-            [['created_at'], 'safe'],
+            [['created_at', 'updated_at'], 'safe'],
             [['titulo'], 'string', 'max' => 255],
             [['historia', 'ingredientes', 'comentarios'], 'string', 'max' => 10000],
             [['tiempo'], 'string', 'max' => 10],

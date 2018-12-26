@@ -27,11 +27,7 @@
 }
 
 .fecha {
-    display: table-cell;
-    color: #009A3D;
-    font-weight: normal;
-    font-size: 14px;
-    white-space: nowrap;
+    margin-top: 5px;
 }
 
 .encabezados {
@@ -42,6 +38,10 @@
     color: #aaa;
     display: table-cell;
     width: 10000px;
+}
+
+.cont-ingred {
+    margin-top: 20px;
 }
 
 .comensales {

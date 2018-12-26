@@ -45,7 +45,7 @@ $dificultades = UtilHelper::getDropDownList($dificultades);
                     'language' => 'es',
                     'pluginOptions' => [
                         'browseOnZoneClick' => true,
-                        'initialPreview' => $model->rutaReceta,
+                        'initialPreview' => $model->rutaReceta . '?r=' . strtotime($model->updated_at),
                         'initialPreviewAsData' => true,
                         'dropZoneTitle' => 'Sube la foto de tu receta',
                         'dropZoneClickTitle' => '',
@@ -104,7 +104,12 @@ $dificultades = UtilHelper::getDropDownList($dificultades);
                 <h5><b>Pasos</b></h5>
 
                 <?php
-                foreach ($pasos as $i => $paso) { ?>
+                foreach ($pasos as $i => $paso) {
+                    $rutaPaso = $paso->getRutaPaso($model->id, $i);
+                    if ($rutaPaso) {
+                        $rutaPaso .= '?r=' . strtotime($model->updated_at);
+                    }
+                    ?>
                     <div class="entorno-paso-<?= ($i+1) ?>">
                         <?= $form->field($paso, 'texto', ['options' => ['class' => 'pasos']])->textarea(
                             [

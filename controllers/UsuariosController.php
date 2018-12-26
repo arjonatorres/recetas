@@ -53,8 +53,8 @@ class UsuariosController extends Controller
                     'validacion',
                     ['token' => $model->token_val]
                 )
-                    ->setFrom(Yii::$app->params['adminEmail'])
-                    ->setTo(Yii::$app->params['adminEmail'])
+                    ->setFrom([Yii::$app->params['adminEmail'] => 'Recetas Family'])
+                    ->setTo($model->email)
                     ->setSubject('Validar usuario')
                     ->send();
                 Yii::$app->session->setFlash(
