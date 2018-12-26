@@ -46,7 +46,7 @@ $link = Url::to(['/recetas/view', 'id' => $model->id]);
                         </div>
                         <div class="col-md-2 col-xs-2 col-md-offset-4 col-xs-offset-4 iconos">
                             <div class="icono-imagen">
-                                <?= Html::img($model->usuario->getRutaAvatar($model->usuario_id),
+                                <?= Html::img($model->usuario->getRutaAvatar($model->usuario_id) . '?r=' . strtotime($model->usuario->updated_at),
                                     [
                                         'class' => 'img-responsive img-circle',
                                         'width' => '60%',

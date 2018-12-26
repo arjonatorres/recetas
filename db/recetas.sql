@@ -12,6 +12,7 @@ CREATE TABLE usuarios
   , auth_key   varchar(255)
   , token_val  varchar(255) UNIQUE
   , created_at timestamp(0) NOT NULL DEFAULT localtimestamp
+  , updated_at timestamp(0)
 );
 
 DROP TABLE IF EXISTS categorias CASCADE;
