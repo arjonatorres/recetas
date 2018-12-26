@@ -46,7 +46,7 @@ $this->registerJs($js, View::POS_END);
             <div class="panel-body panel-body-view">
                 <?php if ($ruta) { ?>
                     <div class="col-md-12 margin30">
-                        <?= Html::img($ruta,
+                        <?= Html::img($ruta . '?r=' . strtotime($model->updated_at),
                         ['class' => 'img-responsive', 'width' => '100%']
                         ) ?>
                     </div>
@@ -82,7 +82,7 @@ $this->registerJs($js, View::POS_END);
                     </div>
                     <div class="col-md-1 col-md-offset-7 col-xs-3 col-xs-offset-1">
                         <div class="icono-imagen">
-                            <?= Html::img($model->usuario->rutaAvatar,
+                            <?= Html::img($model->usuario->getRutaAvatar($model->usuario_id),
                                 [
                                     'class' => 'img-responsive img-circle',
                                     'width' => '60%',
@@ -94,24 +94,26 @@ $this->registerJs($js, View::POS_END);
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 margin30">
-                        <h1 class="titulo"><?= Html::encode($model->titulo) ?></h1>
-                        <div class="fecha">
-                            <?= Html::encode(Yii::$app->formatter->asDatetime($model->created_at, 'medium')) ?>
-                        </div>
+                    <div class="col-md-12">
+                        <h2 class="titulo"><?= Html::encode($model->titulo) ?></h2>
+                    </div>
+                    <div class="col-md-12 fecha">
+                        <?= 'Publicado el ' . Html::encode(Yii::$app->formatter->asDate($model->created_at, 'medium')) . ' por ' . $model->usuario->usuario ?>
+                    </div>
+                    <div class="col-md-12">
                         <h3 class="categoria"><span class="label label-warning"><?= $model->categoria->nombre ?></span></h3>
                     </div>
                 </div>
 
 
                 <?php if (isset($model->historia)) { ?>
-                    <div class="col-md-12 margin30">
+                    <div class="col-md-12">
                         <h3 class="encabezados">Historia</h3>
                         <span><?= Html::encode($model->historia) ?></span>
                     </div>
                 <?php } ?>
 
-                <div class="col-md-12 margin10">
+                <div class="col-md-12 margin10 cont-ingred">
                     <h3 class="ingredientes">Ingredientes</h3>
                     <div class="comensales">
                         <h4>Para <?= $model->comensales ?> persona<?= $model->comensales != 1 ? 's' : ''?></h4>
@@ -127,7 +129,8 @@ $this->registerJs($js, View::POS_END);
                             <span class="paso-texto"><?= nl2br(Html::encode($paso->texto)) ?></span>
                             <?php
                             $ruta = $paso->getRutaImagen($model->id, $i);
-                            if ($ruta) { ?>
+                            if ($ruta) {
+                                $ruta .= '?r=' . strtotime($model->updated_at); ?>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <?= Html::img($ruta,

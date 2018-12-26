@@ -45,6 +45,7 @@ CREATE TABLE recetas
   , usuario_id   bigint         NOT NULL REFERENCES usuarios (id)
                                 ON DELETE NO ACTION ON UPDATE CASCADE
   , created_at   timestamp(0)   NOT NULL DEFAULT localtimestamp
+  , updated_at   timestamp(0)
 );
 
 CREATE INDEX idx_recetas_titulo ON recetas (titulo);

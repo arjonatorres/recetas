@@ -56,8 +56,20 @@ class RecetasController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $ingredientes = explode("\n", ($model->ingredientes));
+        $ing = '';
+        $num = count($ingredientes);
+        foreach ($ingredientes as $key => $ingrediente) {
+            $ing .= '- ' . $ingrediente;
+            if ($key != ($num-1)){
+                $ing .= "\n";
+            }
+        }
+        $model->ingredientes = $ing;
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -178,6 +190,7 @@ class RecetasController extends Controller
                         if ($newPasos->upload($i, $deleteFotoPaso)) {
                             $newPasos->save(false);
                         } else {
+                            Yii::$app->end();
                             throw new Exception();
                         }
                     }
@@ -200,6 +213,8 @@ class RecetasController extends Controller
                     throw new Exception();
                 }
             } catch (Exception $e) {
+                echo $e->getMessage();
+                Yii::$app->end();
                 $transaction->rollBack();
                 Yii::$app->session->setFlash('danger','Ha ocurrido un error al editar la Receta');
                 return $this->goHome();
