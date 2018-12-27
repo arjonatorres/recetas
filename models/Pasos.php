@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\imagine\Image;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "pasos".
@@ -71,7 +72,11 @@ class Pasos extends \yii\db\ActiveRecord
         $ruta = Yii::$app->basePath . '/web/images/pasos/' . $id . '.jpg';
         if ($this->foto === null) {
             if ($delete) {
-                unlink($ruta);
+                if (file_exists($ruta)) {
+                    if (file_exists($ruta)) {
+                        unlink($ruta);
+                    }
+                }
             }
             return true;
         }

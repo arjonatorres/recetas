@@ -41,16 +41,6 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
         return 'usuarios';
     }
 
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'value' => new Expression('NOW()'),
-            ]
-        ];
-    }
-
     /**
      * {@inheritdoc}
      */

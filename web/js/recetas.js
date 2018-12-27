@@ -143,6 +143,7 @@ $('.btn-borrar-paso').on('click', function() {
 });
 
 $('button[type="submit"]').on('click', function(e) {
+    $('.loading').css({display: 'block'});
     e.preventDefault();
     if ($('.field-recetas-foto').find('img').length > 0){
         $('.field-recetas-foto').removeClass('has-error');
@@ -153,5 +154,17 @@ $('button[type="submit"]').on('click', function(e) {
         $('.field-recetas-foto').addClass('has-error');
         $('.field-recetas-foto').find('.help-block').text('Foto principal no puede estar vacío.');
         $('html, body').animate({scrollTop:0}, 'slow');
+    }
+});
+
+$('.recetas-form').on('click', '.kv-file-remove', function() {
+    var padre = $(this).parents('.file-preview');
+    boton = padre.find('button.fileinput-remove');
+    boton.trigger('click');
+});
+
+$('.recetas-form').on('DOMSubtreeModified', '.help-block', function() {
+    if ($(this).text().length > 0) {
+        $('.loading').css({display: 'none'});
     }
 });
