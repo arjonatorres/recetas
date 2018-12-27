@@ -25,6 +25,7 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body>
+<div class="loading" style="display: none"></div>
 <?php $this->beginBody() ?>
 
 <div class="wrap">

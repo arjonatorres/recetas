@@ -7,6 +7,9 @@ use yii\bootstrap\ActiveForm;
 use app\helpers\UtilHelper;
 
 $title = 'Iniciar sesión';
+$this->registerJsFile('@web/js/login.js?r=20181227', [
+    'depends' => [\yii\web\JqueryAsset::className()],
+]);
 
 ?>
 <div class="site-login">

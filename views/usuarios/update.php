@@ -8,6 +8,10 @@ use app\helpers\UtilHelper;
 /* @var $model app\models\Usuarios */
 
 $this->title = 'Modificar un usuario';
+
+$this->registerJsFile('@web/js/usuarios.js?r=20181227', [
+    'depends' => [\yii\web\JqueryAsset::className()],
+]);
 ?>
 <div class="usuarios-update">
 
@@ -28,7 +32,7 @@ $this->title = 'Modificar un usuario';
                         'language' => 'es',
                         'pluginOptions' => [
                             'browseOnZoneClick' => true,
-                            'initialPreview' => $model->rutaImagen,
+                            'initialPreview' => $model->rutaImagen . '?r=' . strtotime($model->updated_at),
                             'initialPreviewAsData' => true,
                             'dropZoneTitle' => 'Sube foto de perfil',
                             'showPreview' => true,
