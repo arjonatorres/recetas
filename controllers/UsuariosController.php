@@ -104,6 +104,7 @@ class UsuariosController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->foto = UploadedFile::getInstance($model, 'foto');
+            $model->updated_at =  date('Y-m-d H:i:s');
             if ($model->save() && $model->upload()) {
                 Yii::$app->session->setFlash('info','Su cuenta ha sido actualizada correctamente');
                 return $this->goHome();

@@ -178,6 +178,7 @@ class RecetasController extends Controller
 
             try {
                 $model->foto = UploadedFile::getInstance($model, 'foto');
+                $model->updated_at =  date('Y-m-d H:i:s');
                 $valid = $model->validate();
                 $valid = Model::validateMultiple($pasosArray, ['texto']) && $valid;
                 if ($valid) {

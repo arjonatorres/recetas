@@ -44,16 +44,6 @@ class Recetas extends \yii\db\ActiveRecord
         return 'recetas';
     }
 
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'value' => new Expression('NOW()'),
-            ]
-        ];
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -107,7 +97,9 @@ class Recetas extends \yii\db\ActiveRecord
         $ruta = Yii::$app->basePath . '/web/images/recetas/' . $id . '.jpg';
         if ($this->foto === null) {
             if ($delete) {
-                unlink($ruta);
+                if (file_exists($ruta)) {
+                    unlink($ruta);
+                }
             }
             return true;
         }
