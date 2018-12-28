@@ -27,6 +27,8 @@ use yii\db\Expression;
  * @property Categorias $categoria
  * @property Dificultades $dificultad
  * @property Usuarios $usuario
+ * @property RecetasEtiquetas[] $recetasEtiquetas
+ * @property Etiquetas[] $etiquetas
  */
 class Recetas extends \yii\db\ActiveRecord
 {
@@ -170,5 +172,21 @@ class Recetas extends \yii\db\ActiveRecord
     public function getUsuario()
     {
         return $this->hasOne(Usuarios::className(), ['id' => 'usuario_id'])->inverseOf('recetas');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRecetasEtiquetas()
+    {
+        return $this->hasMany(RecetasEtiquetas::className(), ['receta_id' => 'id'])->inverseOf('receta');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEtiquetas()
+    {
+        return $this->hasMany(Etiquetas::className(), ['id' => 'etiqueta_id'])->viaTable('recetas_etiquetas', ['receta_id' => 'id']);
     }
 }
