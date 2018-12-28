@@ -9,7 +9,7 @@ use app\helpers\UtilHelper;
 
 $this->title = 'Modificar un usuario';
 
-$this->registerJsFile('@web/js/usuarios.js?r=20181227', [
+$this->registerJsFile('@web/js/usuarios.js?r=20181228', [
     'depends' => [\yii\web\JqueryAsset::className()],
 ]);
 ?>

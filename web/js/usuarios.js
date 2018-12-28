@@ -13,3 +13,13 @@ $('form').on('DOMSubtreeModified', '.help-block', function() {
         $('.loading').css({display: 'none'});
     }
 });
+
+$('.field-usuarios-foto').on('click', '.fileinput-remove', function () {
+    var divPadre = $(this).parents('.field-usuarios-foto');
+    idInput = divPadre.find('input[type=file]').attr('id');
+    var inputHidden = $("<input>", {
+        'name': idInput,
+        'type': 'hidden'
+    });
+    divPadre.append(inputHidden);
+});

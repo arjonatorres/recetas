@@ -7,7 +7,7 @@ use yii\bootstrap\ActiveForm;
 use app\helpers\UtilHelper;
 
 $title = 'Registro';
-$this->registerJsFile('@web/js/usuarios.js?r=20181227', [
+$this->registerJsFile('@web/js/usuarios.js?r=20181228', [
     'depends' => [\yii\web\JqueryAsset::className()],
 ]);
 //$this->params['breadcrumbs'][] = $title;
