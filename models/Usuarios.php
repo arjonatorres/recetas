@@ -84,17 +84,23 @@ class Usuarios extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfac
 
     /**
      * Guarda foto de perfil
-     * @return bool
+     * @return bool Si se ha efectuado la subida correctamente.
      */
-    public function upload()
+    public function upload($delete = false)
     {
+        $ruta = Yii::$app->basePath . '/web/images/avatar/' . $this->id . '.jpg';
         if ($this->foto === null) {
+            if ($delete) {
+                if (file_exists($ruta)) {
+                    unlink($ruta);
+                }
+            }
             return true;
         }
-        $nombre = Yii::$app->basePath . '/web/images/avatar/' . $this->id . '.jpg';
-        $res = $this->foto->saveAs($nombre);
+
+        $res = $this->foto->saveAs($ruta);
         if ($res) {
-            Image::thumbnail($nombre, 300, 300)->save($nombre, ['quality' => 80]);
+            Image::thumbnail($ruta, 300, 300)->save($ruta, ['quality' => 80]);
         }
         return $res;
     }
