@@ -60,6 +60,7 @@ class RecetasController extends Controller
     {
         $model = $this->findModel($id);
         $ingredientes = explode("\n", ($model->ingredientes));
+        $model->etiqueta = array_column($model->etiquetas, 'nombre');
         $ing = '';
         $num = count($ingredientes);
         foreach ($ingredientes as $key => $ingrediente) {

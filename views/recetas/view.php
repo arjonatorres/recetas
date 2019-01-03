@@ -105,6 +105,14 @@ $this->registerJs($js, View::POS_END);
                     </div>
                 </div>
 
+                <div class="col-md-12">
+                    <?php
+                    foreach ($model->etiqueta as $etiqueta) { ?>
+                        <span class="label label-default"><?= $etiqueta ?></span>
+                    <?php }
+                    ?>
+                </div>
+
 
                 <?php if (isset($model->historia)) { ?>
                     <div class="col-md-12">
