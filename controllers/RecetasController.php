@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\models\Dificultades;
+use app\models\Etiquetas;
+use app\models\RecetasEtiquetas;
 use Yii;
 use app\models\Recetas;
 use app\models\Categorias;
@@ -86,6 +88,8 @@ class RecetasController extends Controller
         $dificultades = Dificultades::find()->all();
         if (Yii::$app->request->isPost) {
             $recetas->load(Yii::$app->request->post());
+            $etiquetas = Yii::$app->request->post('Recetas')['etiqueta'];
+
             foreach (Yii::$app->request->post('Pasos') as $i => $data) {
                 if (preg_match('/^foto/', $i) == 1) {
                     continue;
@@ -103,6 +107,7 @@ class RecetasController extends Controller
                 $valid = Model::validateMultiple($pasosArray, ['texto']) && $valid;
                 if ($valid) {
                     $recetas->save(false);
+                    $this->guardarEtiquetas($etiquetas, $recetas);
                     foreach ($pasosArray as $i => $newPasos) {
                         $newPasos->receta_id = $recetas->id;
                         if ($newPasos->upload($i)) {
@@ -152,11 +157,13 @@ class RecetasController extends Controller
         $pasos = Pasos::findAll(['receta_id' => $model->id]);
         $categorias = Categorias::find()->all();
         $dificultades = Dificultades::find()->all();
+        $model->etiqueta = array_column($model->etiquetas, 'nombre');
 
         if (Yii::$app->request->isPost) {
 
             $numPasosActual = 0;
             $model->load(Yii::$app->request->post());
+            $etiquetas = Yii::$app->request->post('Recetas')['etiqueta'];
             foreach (Yii::$app->request->post('Pasos') as $i => $data) {
                 if (preg_match('/^foto/', $i) == 1) {
                     continue;
@@ -183,6 +190,7 @@ class RecetasController extends Controller
                 $valid = Model::validateMultiple($pasosArray, ['texto']) && $valid;
                 if ($valid) {
                     $model->save(false);
+                    $this->guardarEtiquetas($etiquetas, $model);
                     foreach ($pasosArray as $i => $newPasos) {
                         $newPasos->receta_id = $model->id;
                         $idHiddenFotoPaso = ($i == 0) ? 'pasos-foto' : 'pasos-foto-' . $i;
@@ -191,7 +199,6 @@ class RecetasController extends Controller
                         if ($newPasos->upload($i, $deleteFotoPaso)) {
                             $newPasos->save(false);
                         } else {
-                            Yii::$app->end();
                             throw new Exception();
                         }
                     }
@@ -215,7 +222,6 @@ class RecetasController extends Controller
                 }
             } catch (Exception $e) {
                 echo $e->getMessage();
-                Yii::$app->end();
                 $transaction->rollBack();
                 Yii::$app->session->setFlash('danger','Ha ocurrido un error al editar la Receta');
                 return $this->goHome();
@@ -245,12 +251,20 @@ class RecetasController extends Controller
         }
         $recetaId = $receta->id;
         $pasos = $receta->pasos;
+        $recetasEtiquetas = $receta->recetasEtiquetas;
         $nPasos = count($pasos);
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
             foreach ($pasos as $paso) {
                 if ($paso->delete() === false) {
+                    throw new Exception();
+                }
+            }
+            foreach ($recetasEtiquetas as $recetaEtiqueta) {
+                $oldEtiqueta = Etiquetas::findOne(['id' => $recetaEtiqueta->etiqueta_id]);
+                $this->borrarEtiqueta($oldEtiqueta);
+                if ($recetaEtiqueta->delete() === false) {
                     throw new Exception();
                 }
             }
@@ -294,5 +308,53 @@ class RecetasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    private function guardarEtiquetas($etiquetas, $receta) {
+        $etiquetasReceta = array_column($receta->etiquetas, 'nombre');
+        $etiqBorrar = array_diff($etiquetasReceta, $etiquetas);
+        $etiqAnadir = array_diff($etiquetas, $etiquetasReceta);
+
+        foreach ($etiqAnadir as $etiqueta) {
+            $oldEtiqueta = Etiquetas::findOne(['nombre' => $etiqueta]);
+
+            if (!$oldEtiqueta) {
+                $newEtiqueta = new Etiquetas(['nombre' => $etiqueta]);
+                $newEtiqueta->save();
+                $recetaEtiqueta = new RecetasEtiquetas([
+                    'receta_id' => $receta->id,
+                    'etiqueta_id' => $newEtiqueta->id
+                ]);
+                $recetaEtiqueta->save();
+            } else {
+                $recetaEtiqueta = new RecetasEtiquetas([
+                    'receta_id' => $receta->id,
+                    'etiqueta_id' => $oldEtiqueta->id
+                ]);
+                $recetaEtiqueta->save();
+            }
+        }
+
+        foreach ($etiqBorrar as $etiqueta) {
+
+            $oldEtiqueta = Etiquetas::findOne(['nombre' => $etiqueta]);
+
+            $recetaEtiqueta = RecetasEtiquetas::findOne([
+                'receta_id' => $receta->id,
+                'etiqueta_id' => $oldEtiqueta->id
+            ]);
+            $recetaEtiqueta->delete();
+            $this->borrarEtiqueta($oldEtiqueta);
+        }
+
+    }
+
+    private function borrarEtiqueta($etiqueta) {
+        $recetaEtiqueta = RecetasEtiquetas::findOne([
+            'etiqueta_id' => $etiqueta->id,
+        ]);
+        if (!$recetaEtiqueta) {
+            $etiqueta->delete();
+        }
     }
 }

@@ -39,6 +39,12 @@ class Recetas extends \yii\db\ActiveRecord
     public $foto;
 
     /**
+     * Contiene las etiquetas
+     * @var
+     */
+    public $etiqueta;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -56,7 +62,7 @@ class Recetas extends \yii\db\ActiveRecord
             [['comensales'], 'number'],
             [['historia', 'dificultad_id', 'comentarios'], 'default', 'value' => null],
             [['categoria_id', 'dificultad_id'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'etiqueta'], 'safe'],
             [['titulo'], 'string', 'max' => 255],
             [['historia', 'ingredientes', 'comentarios'], 'string', 'max' => 10000],
             [['tiempo'], 'string', 'max' => 10],
@@ -85,7 +91,8 @@ class Recetas extends \yii\db\ActiveRecord
             'dificultad_id' => 'Dificultad',
             'usuario_id' => 'Usuario ID',
             'created_at' => 'Created At',
-            'foto' => 'Foto principal'
+            'foto' => 'Foto principal',
+            'etiqueta' => 'Etiquetas',
         ];
     }
 

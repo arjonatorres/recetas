@@ -30,6 +30,7 @@ class Etiquetas extends \yii\db\ActiveRecord
     {
         return [
             [['nombre'], 'string', 'max' => 30],
+            [['nombre'], 'unique'],
         ];
     }
 

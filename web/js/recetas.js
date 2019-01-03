@@ -16,26 +16,6 @@ if (contador >= 1) {
 }
 divNuevo = $('.entorno-paso-' + (contador+1));
 
-$('.col-md-5').on('click', '.fileinput-remove', function () {
-    var divPadre = $(this).parents('.col-md-5');
-    idInput = divPadre.find('input[type=file]').attr('id');
-    var inputHidden = $("<input>", {
-        'name': idInput,
-        'type': 'hidden'
-    });
-    divPadre.append(inputHidden);
-});
-
-$('.field-recetas-foto').on('click', '.fileinput-remove', function () {
-    var divPadre = $(this).parents('.field-recetas-foto');
-    idInput = divPadre.find('input[type=file]').attr('id');
-    var inputHidden = $("<input>", {
-        'name': idInput,
-        'type': 'hidden'
-    });
-    divPadre.append(inputHidden);
-});
-
 $('.btn-anadir-paso').on('click', function() {
     // if(pasoActual.find('textarea').val() == '') {
     //     krajeeDialog.alert('El paso no puede estar vacio.');
@@ -148,6 +128,7 @@ $('button[type="submit"]').on('click', function(e) {
     if ($('.field-recetas-foto').find('img').length > 0){
         $('.field-recetas-foto').removeClass('has-error');
         $('.field-recetas-foto').addClass('has-success');
+        borrarFotos();
         $('#form').submit();
     } else {
         $('.field-recetas-foto').removeClass('has-success');
@@ -168,3 +149,17 @@ $('.recetas-form').on('DOMSubtreeModified', '.help-block', function() {
         $('.loading').css({display: 'none'});
     }
 });
+
+function borrarFotos() {
+    $('.file-input').each(function() {
+        if ($(this).find('img').length == 0) {
+            var divPadre = $(this).parents('.form-group');
+            idInput = divPadre.find('input[type=file]').attr('id');
+            var inputHidden = $("<input>", {
+                'name': idInput,
+                'type': 'hidden'
+            });
+            divPadre.append(inputHidden);
+        }
+    });
+}

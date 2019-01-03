@@ -33,7 +33,7 @@ DROP TABLE IF EXISTS etiquetas CASCADE;
 CREATE TABLE etiquetas
 (
     id      BIGSERIAL    PRIMARY KEY,
-    nombre  VARCHAR(255)
+    nombre  VARCHAR(255) UNIQUE
 );
 
 DROP TABLE IF EXISTS recetas CASCADE;
