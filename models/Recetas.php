@@ -27,6 +27,8 @@ use yii\db\Expression;
  * @property Categorias $categoria
  * @property Dificultades $dificultad
  * @property Usuarios $usuario
+ * @property RecetasEtiquetas[] $recetasEtiquetas
+ * @property Etiquetas[] $etiquetas
  */
 class Recetas extends \yii\db\ActiveRecord
 {
@@ -35,6 +37,12 @@ class Recetas extends \yii\db\ActiveRecord
      * @var UploadedFile
      */
     public $foto;
+
+    /**
+     * Contiene las etiquetas
+     * @var
+     */
+    public $etiqueta;
 
     /**
      * {@inheritdoc}
@@ -54,7 +62,7 @@ class Recetas extends \yii\db\ActiveRecord
             [['comensales'], 'number'],
             [['historia', 'dificultad_id', 'comentarios'], 'default', 'value' => null],
             [['categoria_id', 'dificultad_id'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'etiqueta'], 'safe'],
             [['titulo'], 'string', 'max' => 255],
             [['historia', 'ingredientes', 'comentarios'], 'string', 'max' => 10000],
             [['tiempo'], 'string', 'max' => 10],
@@ -83,7 +91,8 @@ class Recetas extends \yii\db\ActiveRecord
             'dificultad_id' => 'Dificultad',
             'usuario_id' => 'Usuario ID',
             'created_at' => 'Created At',
-            'foto' => 'Foto principal'
+            'foto' => 'Foto principal',
+            'etiqueta' => 'Etiquetas',
         ];
     }
 
@@ -170,5 +179,21 @@ class Recetas extends \yii\db\ActiveRecord
     public function getUsuario()
     {
         return $this->hasOne(Usuarios::className(), ['id' => 'usuario_id'])->inverseOf('recetas');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRecetasEtiquetas()
+    {
+        return $this->hasMany(RecetasEtiquetas::className(), ['receta_id' => 'id'])->inverseOf('receta');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEtiquetas()
+    {
+        return $this->hasMany(Etiquetas::className(), ['id' => 'etiqueta_id'])->viaTable('recetas_etiquetas', ['receta_id' => 'id']);
     }
 }

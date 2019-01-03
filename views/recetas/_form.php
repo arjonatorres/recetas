@@ -5,6 +5,8 @@ use yii\widgets\ActiveForm;
 use app\helpers\UtilHelper;
 use kartik\file\FileInput;
 use kartik\dialog\Dialog;
+use kartik\select2\Select2;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Recetas */
@@ -28,6 +30,7 @@ echo Dialog::widget([
 ]);
 $categorias = UtilHelper::getDropDownList($categorias);
 $dificultades = UtilHelper::getDropDownList($dificultades);
+$urlEtiquetas = \yii\helpers\Url::to(['/etiquetas/list']);
 ?>
     <div class="panel panel-success panel-principal">
         <div class="panel-heading panel-heading-principal">
@@ -59,6 +62,23 @@ $dificultades = UtilHelper::getDropDownList($dificultades);
                     'maxlength' => true,
                     'placeholder' => 'Título que describa bien la receta...',
                 ]) ?>
+
+
+                <?= $form->field($model, 'etiqueta')->widget(Select2::classname(),
+                    [
+                        'options' => ['placeholder' => 'Etiquetas separadas por espacio o comas...', 'multiple' => true],
+                        'pluginOptions' => [
+                        'tags' => true,
+                        'tokenSeparators' => [',', ' '],
+                        'minimumInputLength' => 3,
+                        'maximumInputLength' => 20,
+                        'ajax' => [
+                            'url' => $urlEtiquetas,
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                        ],
+                    ],
+                ]); ?>
 
                 <?= $form->field($model, 'historia')->textarea(
                     [

@@ -29,6 +29,13 @@ CREATE TABLE dificultades
     nombre  VARCHAR(255)
 );
 
+DROP TABLE IF EXISTS etiquetas CASCADE;
+CREATE TABLE etiquetas
+(
+    id      BIGSERIAL    PRIMARY KEY,
+    nombre  VARCHAR(255) UNIQUE
+);
+
 DROP TABLE IF EXISTS recetas CASCADE;
 CREATE TABLE recetas
 (
@@ -51,6 +58,16 @@ CREATE TABLE recetas
 
 CREATE INDEX idx_recetas_titulo ON recetas (titulo);
 
+DROP TABLE IF EXISTS recetas_etiquetas CASCADE;
+CREATE TABLE recetas_etiquetas
+(
+    receta_id bigint         NOT NULL REFERENCES recetas (id)
+                             ON DELETE NO ACTION ON UPDATE CASCADE
+  , etiqueta_id bigint       NOT NULL REFERENCES etiquetas (id)
+                             ON DELETE NO ACTION ON UPDATE CASCADE
+  , PRIMARY KEY (receta_id, etiqueta_id)
+);
+
 DROP TABLE IF EXISTS pasos CASCADE;
 CREATE TABLE pasos
 (
@@ -69,16 +86,18 @@ INSERT INTO categorias (nombre)
      VALUES ('Aperitivos y tapas'),
             ('Arroces y cereales'),
             ('Aves y caza'),
+            ('Bebidas, cócteles e infusiones'),
             ('Carne'),
             ('Cócteles y bebidas'),
             ('Ensaladas'),
             ('Guisos y Potajes'),
             ('Huevos y lácteos'),
+            ('Legumbres'),
             ('Mariscos'),
             ('Pan y bollería'),
             ('Pasta'),
             ('Pescado'),
-            ('Postres'),
+            ('Postres y dulces'),
             ('Salsas'),
             ('Sopas y cremas'),
             ('Verduras');

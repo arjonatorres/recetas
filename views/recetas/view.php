@@ -7,7 +7,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $model app\models\Recetas */
 
-$this->registerCssFile('@web/css/recetas-view.css?r=20181226', [
+$this->registerCssFile('@web/css/recetas-view.css?r=20181228', [
     'depends' => [\yii\bootstrap\BootstrapAsset::className(), \yii\web\YiiAsset::className()],
 ]);
 $this->title = $model->titulo . ' de ' . Yii::$app->user->identity->usuario;
@@ -98,11 +98,19 @@ $this->registerJs($js, View::POS_END);
                         <h2 class="titulo"><?= Html::encode($model->titulo) ?></h2>
                     </div>
                     <div class="col-md-12 fecha">
-                        <?= 'Publicado el ' . Html::encode(Yii::$app->formatter->asDate($model->created_at, 'medium')) . ' por ' . $model->usuario->usuario ?>
+                        <span class="gris">Publicado el </span> <?= Html::encode(Yii::$app->formatter->asDate($model->created_at, 'medium')) ?><span class="gris"> por </span><?= $model->usuario->usuario ?>
                     </div>
                     <div class="col-md-12">
                         <h3 class="categoria"><span class="label label-warning"><?= $model->categoria->nombre ?></span></h3>
                     </div>
+                </div>
+
+                <div class="col-md-12">
+                    <?php
+                    foreach ($model->etiqueta as $etiqueta) { ?>
+                        <span class="label label-default"><?= $etiqueta ?></span>
+                    <?php }
+                    ?>
                 </div>
 
 
