@@ -64,9 +64,11 @@ class RecetasController extends Controller
         $ing = '';
         $num = count($ingredientes);
         foreach ($ingredientes as $key => $ingrediente) {
-            $ing .= '- ' . $ingrediente;
-            if ($key != ($num-1)){
-                $ing .= "\n";
+            if (trim($ingrediente) != '') {
+                $ing .= '- ' . $ingrediente;
+                if ($key != ($num-1)){
+                    $ing .= "\n";
+                }
             }
         }
         $model->ingredientes = $ing;
@@ -151,7 +153,7 @@ class RecetasController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->usuario_id != Yii::$app->user->id) {
+        if (($model->usuario_id != Yii::$app->user->id) && (Yii::$app->user->id != 1)) {
             return $this->goHome();
         }
 
@@ -247,7 +249,7 @@ class RecetasController extends Controller
     public function actionDelete($id)
     {
         $receta = $this->findModel($id);
-        if ($receta->usuario_id != Yii::$app->user->id) {
+        if (($receta->usuario_id != Yii::$app->user->id) && (Yii::$app->user->id != 1)) {
             return $this->goHome();
         }
         $recetaId = $receta->id;
