@@ -7,7 +7,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $model app\models\Recetas */
 
-$this->registerCssFile('@web/css/recetas-view.css?r=20181228', [
+$this->registerCssFile('@web/css/recetas-view.css?r=20190105', [
     'depends' => [\yii\bootstrap\BootstrapAsset::className(), \yii\web\YiiAsset::className()],
 ]);
 $this->title = $model->titulo . ' de ' . Yii::$app->user->identity->usuario;
@@ -100,19 +100,15 @@ $this->registerJs($js, View::POS_END);
                     <div class="col-md-12 fecha">
                         <span class="gris">Publicado el </span> <?= Html::encode(Yii::$app->formatter->asDate($model->created_at, 'medium')) ?><span class="gris"> por </span><?= $model->usuario->usuario ?>
                     </div>
-                    <div class="col-md-12">
-                        <h3 class="categoria"><span class="label label-warning"><?= $model->categoria->nombre ?></span></h3>
+                    <div class="col-md-12" style="margin-top: 10px;line-height: 1.6em;">
+                        <h4 class="categoria etiquetas" style="display:inline"><span class="label label-warning"><?= $model->categoria->nombre ?></span></h4>
+                        <?php
+                        foreach ($model->etiqueta as $etiqueta) { ?>
+                            <span class="label label-default"><?= $etiqueta ?></span>
+                        <?php }
+                        ?>
                     </div>
                 </div>
-
-                <div class="col-md-12">
-                    <?php
-                    foreach ($model->etiqueta as $etiqueta) { ?>
-                        <span class="label label-default"><?= $etiqueta ?></span>
-                    <?php }
-                    ?>
-                </div>
-
 
                 <?php if (isset($model->historia)) { ?>
                     <div class="col-md-12">
@@ -132,7 +128,7 @@ $this->registerJs($js, View::POS_END);
                 <div class="col-md-12">
                     <h3 class="encabezados">Pasos</h3>
                     <?php foreach ($model->pasos as $i => $paso) { ?>
-                        <div class="<?= ($i+1) != $numPasos ? 'pasos ': 'margin10 ' ?>paso<?=($i+1)?>">
+                        <div class="<?= ($i+1) != $numPasos ? 'pasos ': 'pasos margin10 ' ?>paso<?=($i+1)?>">
                             <h4><span class="label label-default"><?=($i+1)?></span></h4>
                             <span class="paso-texto"><?= nl2br(Html::encode($paso->texto)) ?></span>
                             <?php
@@ -179,7 +175,7 @@ $this->registerJs($js, View::POS_END);
                 <?php } ?>
 
                 <?php
-                if ($model->usuario_id == Yii::$app->user->id) { ?>
+                if (($model->usuario_id == Yii::$app->user->id) || (Yii::$app->user->id == 1)) { ?>
                 <div class="col-md-12 margin20">
                     <hr />
                     <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
