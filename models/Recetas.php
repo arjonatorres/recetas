@@ -69,7 +69,7 @@ class Recetas extends \yii\db\ActiveRecord
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::className(), 'targetAttribute' => ['categoria_id' => 'id']],
             [['dificultad_id'], 'exist', 'skipOnError' => true, 'targetClass' => Dificultades::className(), 'targetAttribute' => ['dificultad_id' => 'id']],
             [['!usuario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario_id' => 'id']],
-            [['foto'], 'file', 'extensions' => 'jpg, png'],
+            [['foto'], 'file', 'extensions' => 'jpg'],
             [['foto'], 'file', 'maxSize' => 1024 * 1024 * 8, 'message' => 'La foto principal tiene que ser menor de 8MB'],
         ];
     }

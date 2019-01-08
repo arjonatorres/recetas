@@ -64,6 +64,7 @@ $('.btn-anadir-paso').on('click', function() {
     // Foto nueva
     var fotoNueva = '<input type="file" id="pasos-foto-' + contador + '" name="Pasos[foto' + contador + ']" accept="image/jpeg" />';
     div4.append(fotoNueva);
+    div4.append('<div class="help-block"></div>');
 
     $('#pasos-foto-' + contador).fileinput('enable');
     $('#pasos-foto-' + contador).fileinput('refresh', {
@@ -101,14 +102,45 @@ $('.btn-anadir-paso').on('click', function() {
             });
         }
     });
+
+    $("#form").yiiActiveForm("add",{
+        "id": "pasos-foto-" + contador,
+        "name": "Pasos[foto" + contador + "]",
+        "container": ".field-pasos-foto-" + (contador+1),
+        "input": "#pasos-foto-" + contador,
+        "error": ".help-block",
+        "validate": function(attribute, value, messages, deferred, $form) {
+            yii.validation.file(attribute, messages, {
+                "message":"Falló la subida del archivo.",
+                "skipOnEmpty":true,
+                "mimeTypes":[],
+                "wrongMimeType":"Sólo se aceptan archivos con los siguientes tipos MIME: .",
+                "extensions":["jpg"],
+                "wrongExtension":"Sólo se aceptan archivos con las siguientes extensiones: jpg",
+                "maxFiles":1,
+                "tooMany":"Puedes subir como máximo 1 archivo."
+            });
+            yii.validation.file(attribute, messages, {
+                "message":"La foto tiene que ser menor de 1MB",
+                "skipOnEmpty":true,
+                "mimeTypes":[],
+                "wrongMimeType":"Sólo se aceptan archivos con los siguientes tipos MIME: ."
+                ,"extensions":[],
+                "wrongExtension":"Sólo se aceptan archivos con las siguientes extensiones: ",
+                "maxSize":8388608,
+                "tooBig":"El archivo \"{file}\" es demasiado grande. Su tamaño no puede exceder 1 MiB.",
+                "maxFiles":1,
+                "tooMany":"Puedes subir como máximo 1 archivo."
+            });
+        }
+    });
 });
 
 $('.btn-borrar-paso').on('click', function() {
     krajeeDialog.confirm("¿Está seguro que quiere borrar el paso?", function (result) {
         if (result) {
-            $("#form").yiiActiveForm("remove",{
-                "id": "pasos-texto-" + contador
-            });
+            $("#form").yiiActiveForm("remove", "pasos-texto-" + contador);
+            $("#form").yiiActiveForm("remove", "pasos-foto-" + contador);
             contador -= 1;
             if (contador == 0) {
                 $('.btn-borrar-paso').hide();

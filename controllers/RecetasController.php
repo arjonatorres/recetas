@@ -314,6 +314,9 @@ class RecetasController extends Controller
     }
 
     private function guardarEtiquetas($etiquetas, $receta) {
+        if (!is_array($etiquetas)) {
+            return;
+        }
         $etiquetasReceta = array_column($receta->etiquetas, 'nombre');
         $etiqBorrar = array_diff($etiquetasReceta, $etiquetas);
         $etiqAnadir = array_diff($etiquetas, $etiquetasReceta);

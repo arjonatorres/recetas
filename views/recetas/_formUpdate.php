@@ -13,7 +13,7 @@ use yii\web\JsExpression;
 /* @var $form yii\widgets\ActiveForm */
 
 echo Dialog::widget();
-$this->registerJsFile('@web/js/recetas.js?r=20181227', [
+$this->registerJsFile('@web/js/recetas.js?r=20190108', [
     'depends' => [\yii\web\JqueryAsset::className()],
 ]);
 
@@ -132,20 +132,21 @@ $urlEtiquetas = \yii\helpers\Url::to(['/etiquetas/list']);
                     }
                     ?>
                     <div class="entorno-paso-<?= ($i+1) ?>">
-                        <?= $form->field($paso, 'texto', ['options' => ['class' => 'pasos']])->textarea(
+                        <?= $form->field($paso, 'texto[' . $i . ']', ['options' => ['class' => 'pasos']])->textarea(
                             [
                                 'id' => 'pasos-texto' . ($i != 0 ? '-' . $i: ''),
                                 'rows' => 4,
                                 'name' => 'Pasos['. $i . ']',
                                 'placeholder' => 'Describe cómo lo hiciste...',
                                 'style' => 'resize:none',
+                                'value' => $paso->texto
                             ]
                         )->label(
                             '<h3 style="display:inline"><span class="label label-default">' . ($i+1) . '</span></h3>', ['style' => 'margin-bottom: 20px']
                         ) ?>
                         <div class="row paso-foto-<?= ($i+1) ?>">
                             <div class="col-md-5">
-                                <?= $form->field($paso, 'foto')->widget(FileInput::classname(), [
+                                <?= $form->field($paso, 'foto[' . $i . ']')->widget(FileInput::classname(), [
                                     'options' => [
                                         'id' => 'pasos-foto' . ($i != 0 ? '-' . $i: ''),
                                         'accept' => 'image/jpeg',
