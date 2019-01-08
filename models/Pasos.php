@@ -42,7 +42,7 @@ class Pasos extends \yii\db\ActiveRecord
             [['receta_id'], 'default', 'value' => null],
             [['receta_id'], 'integer'],
             [['receta_id'], 'exist', 'skipOnError' => true, 'targetClass' => Recetas::className(), 'targetAttribute' => ['receta_id' => 'id']],
-            [['foto'], 'file', 'extensions' => 'jpg, png'],
+            [['foto'], 'file', 'extensions' => 'jpg'],
             [['foto'], 'file', 'maxSize' => 1024 * 1024 * 8, 'message' => 'La foto tiene que ser menor de 8MB'],
         ];
     }

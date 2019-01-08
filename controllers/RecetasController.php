@@ -295,4 +295,55 @@ class RecetasController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    private function guardarEtiquetas($etiquetas, $receta) {
+        if (!is_array($etiquetas)) {
+            return;
+        }
+        $etiquetasReceta = array_column($receta->etiquetas, 'nombre');
+        $etiqBorrar = array_diff($etiquetasReceta, $etiquetas);
+        $etiqAnadir = array_diff($etiquetas, $etiquetasReceta);
+
+        foreach ($etiqAnadir as $etiqueta) {
+            $oldEtiqueta = Etiquetas::findOne(['nombre' => $etiqueta]);
+
+            if (!$oldEtiqueta) {
+                $newEtiqueta = new Etiquetas(['nombre' => $etiqueta]);
+                $newEtiqueta->save();
+                $recetaEtiqueta = new RecetasEtiquetas([
+                    'receta_id' => $receta->id,
+                    'etiqueta_id' => $newEtiqueta->id
+                ]);
+                $recetaEtiqueta->save();
+            } else {
+                $recetaEtiqueta = new RecetasEtiquetas([
+                    'receta_id' => $receta->id,
+                    'etiqueta_id' => $oldEtiqueta->id
+                ]);
+                $recetaEtiqueta->save();
+            }
+        }
+
+        foreach ($etiqBorrar as $etiqueta) {
+
+            $oldEtiqueta = Etiquetas::findOne(['nombre' => $etiqueta]);
+
+            $recetaEtiqueta = RecetasEtiquetas::findOne([
+                'receta_id' => $receta->id,
+                'etiqueta_id' => $oldEtiqueta->id
+            ]);
+            $recetaEtiqueta->delete();
+            $this->borrarEtiqueta($oldEtiqueta);
+        }
+
+    }
+
+    private function borrarEtiqueta($etiqueta) {
+        $recetaEtiqueta = RecetasEtiquetas::findOne([
+            'etiqueta_id' => $etiqueta->id,
+        ]);
+        if (!$recetaEtiqueta) {
+            $etiqueta->delete();
+        }
+    }
 }

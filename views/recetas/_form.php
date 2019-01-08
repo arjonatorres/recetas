@@ -11,7 +11,7 @@ use kartik\dialog\Dialog;
 /* @var $form yii\widgets\ActiveForm */
 
 echo Dialog::widget();
-$this->registerJsFile('@web/js/recetas.js?r=20181227', [
+$this->registerJsFile('@web/js/recetas.js?r=20190108', [
     'depends' => [\yii\web\JqueryAsset::className()],
 ]);
 
