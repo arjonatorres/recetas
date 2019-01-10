@@ -18,7 +18,15 @@ $this->title = 'Recetas';
             echo ListView::widget([
                 'dataProvider' => $dataProvider,
                 'itemView' => '_list',
-                'layout' => "<div class=\"row cuadriculas\">{items}</div>{pager}",
+                'layout' => "{items}{pager}",
+                'options' => [
+                    'class' => 'row cuadriculas',
+                    'id' => false
+                ],
+                'itemOptions' => [
+                    'tag' => false
+                ],
+                'viewParams' => ['totalCount' => $dataProvider->getTotalCount()]
             ]);
             ?>
         </div>
