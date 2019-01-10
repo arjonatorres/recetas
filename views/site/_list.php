@@ -4,6 +4,10 @@ use yii\helpers\Url;
 
 $link = Url::to(['/recetas/view', 'id' => $model->id]);
 ?>
+
+<?php if ($index == 0 || $index == 4 || $index == 8) { ?>
+<div class="row">
+<?php } ?>
 <div class="col-md-3">
     <a href="<?=$link ?>" style="text-decoration: none;">
         <div class="panel panel-principal">
@@ -61,3 +65,6 @@ $link = Url::to(['/recetas/view', 'id' => $model->id]);
         </div>
     </a>
 </div>
+<?php if ($index == 3 || $index == 7 || $index == 11 || $index == $totalCount-1) { ?>
+    </div>
+<?php } ?>

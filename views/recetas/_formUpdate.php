@@ -83,7 +83,6 @@ $dificultades = UtilHelper::getDropDownList($dificultades);
                             [
                                 'type' => 'number',
                                 'min' => 1,
-                                'value' => 2,
                             ]
                         ) ?>
                     </div>
