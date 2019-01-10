@@ -104,7 +104,6 @@ $urlEtiquetas = \yii\helpers\Url::to(['/etiquetas/list']);
                             [
                                 'type' => 'number',
                                 'min' => 1,
-                                'value' => 2,
                             ]
                         ) ?>
                     </div>
