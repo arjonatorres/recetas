@@ -7,7 +7,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $model app\models\Recetas */
 
-$this->registerCssFile('@web/css/recetas-view.css?r=20190105', [
+$this->registerCssFile('@web/css/recetas-view.css?r=20190115', [
     'depends' => [\yii\bootstrap\BootstrapAsset::className(), \yii\web\YiiAsset::className()],
 ]);
 $this->title = $model->titulo . ' de ' . Yii::$app->user->identity->usuario;
@@ -125,18 +125,18 @@ $this->registerJs($js, View::POS_END);
                     <?= nl2br(Html::encode($model->ingredientes)) ?>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 div-pasos">
                     <h3 class="encabezados">Pasos</h3>
                     <?php foreach ($model->pasos as $i => $paso) { ?>
                         <div class="<?= ($i+1) != $numPasos ? 'pasos ': 'pasos margin10 ' ?>paso<?=($i+1)?>">
-                            <h4><span class="label label-default"><?=($i+1)?></span></h4>
+                            <h5 class="numeros" style="display:inline"><span class="label label-default"><?=($i+1)?></span></h5>
                             <span class="paso-texto"><?= nl2br(Html::encode($paso->texto)) ?></span>
                             <?php
                             $ruta = $paso->getRutaImagen($model->id, $i);
                             if ($ruta) {
                                 $ruta .= '?r=' . strtotime($model->updated_at); ?>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 imagenes-pasos">
                                         <?= Html::img($ruta,
                                             [
                                                 'class' => 'img-responsive',
