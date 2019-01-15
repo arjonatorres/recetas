@@ -54,8 +54,21 @@
     margin-bottom: 25px;
 }
 
-.paso-texto {
-    font-size: 1.3em;
+.div-pasos {
+    padding-left: 40px;
+}
+
+.numeros {
+    margin-left: -25px;
+    padding-right: 4px;
+}
+
+.div-pasos .encabezados {
+    margin-left: -25px;
+}
+
+.imagenes-pasos {
+    padding: 0px;
 }
 
 .pasos .row img {
