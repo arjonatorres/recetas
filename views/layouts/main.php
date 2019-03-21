@@ -10,6 +10,37 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\helpers\UtilHelper;
+use yii\helpers\Url;
+use app\models\RecetasSearch;
+use yii\bootstrap\ActiveForm;
+
+// Advanced search
+use kartik\select2\Select2;
+use yii\web\JsExpression;
+use app\models\Categorias;
+use app\models\Dificultades;
+// end
+
+$this->registerJsFile('@web/js/site.js?r=20190209', [
+    'depends' => [\yii\web\JqueryAsset::className()],
+]);
+
+$url = Url::to(['site/index']);
+$search = filter_input(INPUT_POST, 'RecetasSearch', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+//var_dump($search);
+//Yii::$app->end();
+
+$searchModel = new RecetasSearch();
+$searchModel->load($_POST);
+$searchModel->etiqueta = $search['etiqueta'];
+
+// Advanced search
+$urlEtiquetas = \yii\helpers\Url::to(['/etiquetas/list']);
+$categorias = Categorias::find()->all();
+$categorias = UtilHelper::getDropDownList($categorias);
+$dificultades = Dificultades::find()->all();
+$dificultades = UtilHelper::getDropDownList($dificultades);
+//end
 
 AppAsset::register($this);
 ?>
@@ -63,9 +94,27 @@ AppAsset::register($this);
         ];
     } else {
         $menuCasa = [
-//            [
-//                'label' => '',
-//            ],
+            [
+                'label' =>
+                    Html::input('text', 'RecetasSearch[titulo]', isset($_POST['avanzada'])? '': $search['titulo'],
+                        [
+                            'placeholder' => 'Buscar...',
+                            'class' => 'search-field',
+                        ]) . '<button type="submit" class="glyphicon glyphicon-search">'
+                    . '</button>',
+                'encode' => false,
+                'url' => false,
+            ],
+                '<li>'
+                . Html::a('Búsqueda avanzada',
+                    false,
+                    [
+                        'class' => 'busqueda-avanzada',
+                            'style' => 'padding-top: 8px!important; margin-top: 6px;',
+                        'data-toggle' => 'modal',
+                        'data-target' => '#adv-search',
+                    ])
+                . '</li>',
         ];
         $usuario = Yii::$app->user->identity;
         $ruta = $usuario->rutaAvatar . '?r=' . strtotime($usuario->updated_at);
@@ -119,11 +168,18 @@ AppAsset::register($this);
             ],
         ];
     }
+    $form = ActiveForm::begin([
+        'action' => ['site/index'],
+        'method' => 'post',
+        'id' => 'titulo-form'
+    ]);
     echo Nav::widget([
         'id' => 'menu-recetas',
         'options' => ['class' => 'navbar-nav navbar-left menu-item'],
         'items' => $menuCasa,
     ]);
+    ActiveForm::end();
+
     echo Nav::widget([
         'id' => 'menu-user',
         'options' => ['class' => 'navbar-nav navbar-right'],
@@ -131,27 +187,6 @@ AppAsset::register($this);
         'items' => $menuItems,
     ]);
 
-//
-//    echo Nav::widget([
-//        'options' => ['class' => 'navbar-nav navbar-right'],
-//        'items' => [
-//            Yii::$app->user->isGuest ? (
-//            ''
-//            ) : (['label' => 'Nueva Receta', 'url' => ['/recetas/create']]),
-//            Yii::$app->user->isGuest ? (
-//                ['label' => 'Login', 'url' => ['/site/login']]
-//            ) : (
-//                '<li>'
-//                . Html::beginForm(['/site/logout'], 'post')
-//                . Html::submitButton(
-//                    'Logout (' . Yii::$app->user->identity->usuario . ')',
-//                    ['class' => 'btn btn-link logout']
-//                )
-//                . Html::endForm()
-//                . '</li>'
-//            )
-//        ],
-//    ]);
     NavBar::end();
     ?>
 
@@ -160,6 +195,101 @@ AppAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
+        <div class="adv-search">
+<!--            <div class="col-md-8 col-md-offset-2">-->
+            <div class="panel panel-default">
+                <div class="panel-heading panel-heading-adv-search">
+                    <h3 class="panel-title">Búsqueda Avanzada</h3>
+                </div>
+                <div class="panel-body">
+                    <?php
+                    $form = ActiveForm::begin([
+                        'id' => 'advanced-search',
+                        'action' => ['site/index'],
+                        'method' => 'post',
+                    ]); ?>
+
+                    <?php
+                    if (!isset($_POST['avanzada'])) {
+                        $searchModel['titulo'] = '';
+                    }
+                    ?>
+                    <div class="col-md-3">
+                        <?= $form->field($searchModel, 'titulo') ?>
+                    </div>
+                    <div class="col-md-3">
+                        <?= $form->field($searchModel, 'historia') ?>
+                    </div>
+                    <div class="col-md-3">
+                        <?=$form->field($searchModel, 'dificultad_id')->dropDownList($dificultades, ['prompt' => 'Seleccione Uno' ]); ?>
+                    </div>
+                    <div class="col-md-3">
+                        <?=$form->field($searchModel, 'categoria_id')->dropDownList($categorias, ['prompt' => 'Seleccione Uno' ]); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $form->field($searchModel, 'etiqueta')->widget(Select2::classname(),
+                            [
+                                'value' => $searchModel->etiqueta,
+                                'options' => ['placeholder' => 'Etiquetas separadas por espacios...', 'multiple' => true],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'tags' => false,
+                                    'tokenSeparators' => [',', ' '],
+                                    'minimumInputLength' => 3,
+                                    'maximumInputLength' => 20,
+                                    'ajax' => [
+                                        'url' => $urlEtiquetas,
+                                        'dataType' => 'json',
+                                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                                    ],
+                                ],
+                            ]
+                        ); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $form->field($searchModel, 'ingredientes')->textInput(
+                                ['placeholder' => 'Ingredientes separados por espacios...']
+                        ) ?>
+                    </div>
+                    <div class="col-md-3">
+                        <?= $form->field($searchModel, 'comensales')->textInput(
+                            [
+                                'type' => 'number',
+                                'min' => 1,
+                            ]
+                        ) ?>
+                    </div>
+
+                    <div class="col-md-3">
+                        <?= $form->field($searchModel, 'tiempo')->textInput([
+                            'maxlength' => true,
+                        ]) ?>
+                    </div>
+
+                    <div class="col-md-6">
+                        <?= $form->field($searchModel, 'paso')->label('Pasos') ?>
+                    </div>
+
+                    <?php // echo $form->field($model, 'pie') ?>
+
+                    <?php // echo $form->field($model, 'categoria_id') ?>
+
+                    <?= Html::hiddenInput('avanzada', 'avanzada') ?>
+
+                    <?php // echo $form->field($model, 'created_at') ?>
+
+                    <div class="col-md-12">
+                        <div class="form-group bottons-adv-search">
+                            <?= Html::submitButton('Buscar', ['class' => 'btn btn-success']) ?>
+                            <?= Html::resetButton('Reset', ['class' => 'reset btn btn-danger']) ?>
+                        </div>
+                    </div>
+                    <?php ActiveForm::end();
+                    ?>
+                </div>
+            </div>
+<!--            </div>-->
+        </div>
         <?= $content ?>
     </div>
 </div>

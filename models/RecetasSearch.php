@@ -18,8 +18,8 @@ class RecetasSearch extends Recetas
     public function rules()
     {
         return [
-            [['id', 'categoria_id', 'usuario_id'], 'integer'],
-            [['titulo', 'historia', 'ingredientes', 'comentarios', 'created_at'], 'safe'],
+            [['id', 'categoria_id', 'usuario_id', 'dificultad_id'], 'integer'],
+            [['titulo', 'historia', 'created_at', 'ingredientes', 'tiempo'], 'safe'],
             [['comensales'], 'number'],
         ];
     }
@@ -58,23 +58,47 @@ class RecetasSearch extends Recetas
             return $dataProvider;
         }
 
-        $dataProvider->sort = ['defaultOrder' => ['created_at' => SORT_ASC]];
-        $dataProvider->pagination->pageSize = 12;
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'comensales' => $this->comensales,
             'categoria_id' => $this->categoria_id,
-            'usuario_id' => $this->usuario_id,
+            'dificultad_id' => $this->dificultad_id,
+//            'usuario_id' => $this->usuario_id,
             'created_at' => $this->created_at,
         ]);
 
-        $query->andFilterWhere(['ilike', 'titulo', $this->titulo])
-            ->andFilterWhere(['ilike', 'historia', $this->historia])
-            ->andFilterWhere(['ilike', 'ingredientes', $this->ingredientes])
-            ->andFilterWhere(['ilike', 'comentarios', $this->comentarios]);
+        $query->andFilterWhere(['ilike', 'titulo', $this->titulo]);
+        $query->andFilterWhere(['ilike', 'historia', $this->historia]);
 
+        if (!empty($params)) {
+            if (!empty($params['RecetasSearch']['etiqueta'])) {
+                $etiquetas = $params['RecetasSearch']['etiqueta'];
+                $models = $dataProvider->getModels();
+                $numModels = count($models);
+
+                for ($i = $numModels; $i > 0; $i--) {
+                    $model = $models[$i-1];
+                    foreach ($etiquetas as $etiqueta) {
+                        $modelEtiquetas = array_column($model->etiquetas, 'nombre');
+                        if (!in_array($etiqueta, $modelEtiquetas)) {
+                            unset($models[$i-1]);
+                        }
+                    }
+                }
+                $dataProvider->setModels($models);
+                $dataProvider->setTotalCount(count($models));
+            }
+            if (!empty($params['RecetasSearch']['ingredientes'])) {
+                $ingredientes = explode(' ', $params['RecetasSearch']['ingredientes']);
+                foreach ($ingredientes as $ingrediente) {
+                    $query->andFilterWhere(['ilike', 'ingredientes', $ingrediente]);
+                }
+            }
+        }
+        
+        $dataProvider->sort = ['defaultOrder' => ['created_at' => SORT_DESC]];
+        $dataProvider->pagination->pageSize = 12;
         return $dataProvider;
     }
 }
