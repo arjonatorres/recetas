@@ -154,7 +154,8 @@ class Recetas extends \yii\db\ActiveRecord
      */
     public function getPasos()
     {
-        return $this->hasMany(Pasos::className(), ['receta_id' => 'id'])->inverseOf('receta');
+        return $this->hasMany(Pasos::className(), ['receta_id' => 'id'])->inverseOf('receta')->
+        orderBy(['id' => SORT_ASC]);
     }
 
     /**
