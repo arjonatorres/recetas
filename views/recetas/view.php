@@ -7,7 +7,7 @@ use yii\web\View;
 /* @var $this yii\web\View */
 /* @var $model app\models\Recetas */
 
-$this->registerCssFile('@web/css/recetas-view.css?r=20190115', [
+$this->registerCssFile('@web/css/recetas-view.css?r=20190323', [
     'depends' => [\yii\bootstrap\BootstrapAsset::className(), \yii\web\YiiAsset::className()],
 ]);
 $this->title = $model->titulo . ' de ' . Yii::$app->user->identity->usuario;

@@ -34,7 +34,7 @@ $searchModel->load($_POST);
 $searchModel->etiqueta =  empty($search['etiqueta'])? '': $search['etiqueta'];
 $searchModel->usuario_id = empty($search['usuario_id'])? '': $search['usuario_id'];
 $nombreUsuario = isset($searchModel->usuario)?$searchModel->usuario->usuario: '';
-$mostrarAvanzada = (isset($search) && isset($avanzada));º
+$mostrarAvanzada = (isset($search) && isset($avanzada));
 // Advanced search
 $urlEtiquetas = \yii\helpers\Url::to(['/etiquetas/list']);
 $urlUsuarios = \yii\helpers\Url::to(['/usuarios/list']);
