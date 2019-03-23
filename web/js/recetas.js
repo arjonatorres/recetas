@@ -154,7 +154,7 @@ $('.btn-borrar-paso').on('click', function() {
     });
 });
 
-$('button[type="submit"]').on('click', function(e) {
+$('#boton-receta').on('click', function(e) {
     $('.loading').css({display: 'block'});
     e.preventDefault();
     if ($('.field-recetas-foto').find('img').length > 0){

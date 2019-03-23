@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use app\models\LoginForm;
+use yii\db\Query;
 
 class UsuariosController extends Controller
 {
@@ -115,5 +115,24 @@ class UsuariosController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionList($q = null, $id = null) {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select('id, usuario AS text')
+                ->from('usuarios')
+                ->where(['ilike', 'usuario', $q])
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        }
+        elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Usuarios::find($id)->usuario];
+        }
+        return $out;
     }
 }
