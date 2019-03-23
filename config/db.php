@@ -1,10 +1,10 @@
 <?php
-if (YII_ENV_PROD) {
+if (YII_ENV_DEV) {
     // Configuración para entorno producción:
     $host = 'localhost';
     $port = '5432';
     $dbname = 'recetas';
-    $username = 'jose';
+    $username = 'postgres';
     $password = 'jose';
     $extra = [];
 } else {
@@ -12,7 +12,7 @@ if (YII_ENV_PROD) {
     $host = 'localhost';
     $port = '5432';
     $dbname = 'recetas';
-    $username = 'postgres';
+    $username = 'jose';
     $password = 'jose';
     $extra = [];
 }
