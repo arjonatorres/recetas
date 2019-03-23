@@ -8,11 +8,11 @@ if (YII_ENV_PROD) {
     $password = 'jose';
     $extra = [];
 } else {
-    // Configuración para entorno local:
-    $host = '192.168.1.13';
+//    // Configuración para entorno local:
+    $host = 'localhost';
     $port = '5432';
     $dbname = 'recetas';
-    $username = 'jose';
+    $username = 'postgres';
     $password = 'jose';
     $extra = [];
 }

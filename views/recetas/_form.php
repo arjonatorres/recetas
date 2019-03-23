@@ -13,7 +13,7 @@ use yii\web\JsExpression;
 /* @var $form yii\widgets\ActiveForm */
 
 echo Dialog::widget();
-$this->registerJsFile('@web/js/recetas.js?r=20190108', [
+$this->registerJsFile('@web/js/recetas.js?r=20190207', [
     'depends' => [\yii\web\JqueryAsset::className()],
 ]);
 
@@ -168,7 +168,7 @@ $urlEtiquetas = \yii\helpers\Url::to(['/etiquetas/list']);
                 ) ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Guardar Receta', ['class' => 'btn btn-success']) ?>
+                    <?= Html::submitButton('Guardar Receta', ['class' => 'btn btn-success', 'id' => 'boton-receta']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>
