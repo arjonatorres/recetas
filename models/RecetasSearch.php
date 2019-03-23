@@ -64,12 +64,12 @@ class RecetasSearch extends Recetas
             'comensales' => $this->comensales,
             'categoria_id' => $this->categoria_id,
             'dificultad_id' => $this->dificultad_id,
-//            'usuario_id' => $this->usuario_id,
+            'usuario_id' => $this->usuario_id,
             'created_at' => $this->created_at,
         ]);
 
         $query->andFilterWhere(['ilike', 'titulo', $this->titulo]);
-        $query->andFilterWhere(['ilike', 'historia', $this->historia]);
+//        $query->andFilterWhere(['ilike', 'historia', $this->historia]);
 
         if (!empty($params)) {
             if (!empty($params['RecetasSearch']['etiqueta'])) {

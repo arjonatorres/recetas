@@ -89,7 +89,7 @@ class Recetas extends \yii\db\ActiveRecord
             'comentarios' => 'Comentarios',
             'categoria_id' => 'Categoria',
             'dificultad_id' => 'Dificultad',
-            'usuario_id' => 'Usuario ID',
+            'usuario_id' => 'Creador',
             'created_at' => 'Created At',
             'foto' => 'Foto principal',
             'etiqueta' => 'Etiquetas',

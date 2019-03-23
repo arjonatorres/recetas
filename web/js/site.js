@@ -1,15 +1,23 @@
+pulsado = 0;
+avanzada = false;
+
 $('.busqueda-avanzada').on('click', function() {
     $(this).toggleClass('busqueda-avanzada-activada');
     $(this).toggleClass('busqueda-avanzada');
     $('.adv-search').toggle('slow');
+    if (pulsado == 0 && !avanzada) {
+        setTimeout(function(){
+            $("#recetassearch-etiqueta").trigger('change');
+        }, 1000);
+    }
+    pulsado = 1;
 });
 
 $( document ).ready(function() {
-   if ($('.adv-search').has('.panel')) {
+   if ($('.adv-search').css('display') != 'none') {
        $('.busqueda-avanzada').toggleClass('busqueda-avanzada-activada');
        $('.busqueda-avanzada').toggleClass('busqueda-avanzada');
-   } else {
-       // console.log('no tiene');
+       avanzada = true;
    }
 });
 

@@ -21,21 +21,23 @@ use app\models\Categorias;
 use app\models\Dificultades;
 // end
 
-$this->registerJsFile('@web/js/site.js?r=20190209', [
+$this->registerJsFile('@web/js/site.js?r=20190323', [
     'depends' => [\yii\web\JqueryAsset::className()],
 ]);
 
 $url = Url::to(['site/index']);
 $search = filter_input(INPUT_POST, 'RecetasSearch', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-//var_dump($search);
-//Yii::$app->end();
+$avanzada = filter_input(INPUT_POST, 'avanzada');
 
 $searchModel = new RecetasSearch();
 $searchModel->load($_POST);
-$searchModel->etiqueta = $search['etiqueta'];
-
+$searchModel->etiqueta =  empty($search['etiqueta'])? '': $search['etiqueta'];
+$searchModel->usuario_id = empty($search['usuario_id'])? '': $search['usuario_id'];
+$nombreUsuario = isset($searchModel->usuario)?$searchModel->usuario->usuario: '';
+$mostrarAvanzada = (isset($search) && isset($avanzada));º
 // Advanced search
 $urlEtiquetas = \yii\helpers\Url::to(['/etiquetas/list']);
+$urlUsuarios = \yii\helpers\Url::to(['/usuarios/list']);
 $categorias = Categorias::find()->all();
 $categorias = UtilHelper::getDropDownList($categorias);
 $dificultades = Dificultades::find()->all();
@@ -195,7 +197,7 @@ AppAsset::register($this);
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
-        <div class="adv-search">
+        <div class="adv-search" style="display: <?= $mostrarAvanzada? 'block': 'none' ?>;">
 <!--            <div class="col-md-8 col-md-offset-2">-->
             <div class="panel panel-default">
                 <div class="panel-heading panel-heading-adv-search">
@@ -214,12 +216,10 @@ AppAsset::register($this);
                         $searchModel['titulo'] = '';
                     }
                     ?>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <?= $form->field($searchModel, 'titulo') ?>
                     </div>
-                    <div class="col-md-3">
-                        <?= $form->field($searchModel, 'historia') ?>
-                    </div>
+
                     <div class="col-md-3">
                         <?=$form->field($searchModel, 'dificultad_id')->dropDownList($dificultades, ['prompt' => 'Seleccione Uno' ]); ?>
                     </div>
@@ -235,7 +235,7 @@ AppAsset::register($this);
                                     'allowClear' => true,
                                     'tags' => false,
                                     'tokenSeparators' => [',', ' '],
-                                    'minimumInputLength' => 3,
+                                    'minimumInputLength' => 2,
                                     'maximumInputLength' => 20,
                                     'ajax' => [
                                         'url' => $urlEtiquetas,
@@ -245,11 +245,6 @@ AppAsset::register($this);
                                 ],
                             ]
                         ); ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?= $form->field($searchModel, 'ingredientes')->textInput(
-                                ['placeholder' => 'Ingredientes separados por espacios...']
-                        ) ?>
                     </div>
                     <div class="col-md-3">
                         <?= $form->field($searchModel, 'comensales')->textInput(
@@ -265,9 +260,29 @@ AppAsset::register($this);
                             'maxlength' => true,
                         ]) ?>
                     </div>
-
                     <div class="col-md-6">
-                        <?= $form->field($searchModel, 'paso')->label('Pasos') ?>
+                        <?= $form->field($searchModel, 'ingredientes')->textInput(
+                                ['placeholder' => 'Ingredientes separados por espacios...']
+                        ) ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $form->field($searchModel, 'usuario_id')->widget(Select2::classname(),
+                            [
+                                'value' => $searchModel->usuario_id,
+                                'initValueText' => $nombreUsuario,
+                                'options' => ['placeholder' => 'Nombre de usuario'],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'minimumInputLength' => 2,
+                                    'maximumInputLength' => 20,
+                                    'ajax' => [
+                                        'url' => $urlUsuarios,
+                                        'dataType' => 'json',
+                                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                                    ],
+                                ],
+                            ]
+                        ); ?>
                     </div>
 
                     <?php // echo $form->field($model, 'pie') ?>

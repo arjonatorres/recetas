@@ -18,7 +18,7 @@ class EtiquetasController extends Controller
             $query = new Query;
             $query->select('nombre AS id, nombre AS text')
                 ->from('etiquetas')
-                ->where(['like', 'nombre', $q])
+                ->where(['ilike', 'nombre', $q])
                 ->limit(20);
             $command = $query->createCommand();
             $data = $command->queryAll();
