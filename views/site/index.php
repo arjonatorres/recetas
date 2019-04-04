@@ -26,7 +26,7 @@ $this->title = 'Recetas';
                 'itemOptions' => [
                     'tag' => false
                 ],
-                'viewParams' => ['totalCount' => $dataProvider->getTotalCount()]
+                'viewParams' => ['totalCount' => $dataProvider->getCount()]
             ]);
             ?>
         </div>

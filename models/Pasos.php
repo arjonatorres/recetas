@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\imagine\Image;
+use Imagine\Image\Box;
 use yii\base\Exception;
 
 /**
@@ -82,7 +83,7 @@ class Pasos extends \yii\db\ActiveRecord
         }
         $res = $this->foto->saveAs($ruta);
         if ($res) {
-            Image::thumbnail($ruta, 1024, 768)->save($ruta, ['quality' => 80]);
+            Image::thumbnail($ruta, 1024, 768)->resize(new Box(1024,768))->save($ruta, ['quality' => 80]);
         }
         return $res;
     }
