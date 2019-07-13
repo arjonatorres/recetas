@@ -86,6 +86,13 @@ class RecetasController extends Controller
     public function actionCreate()
     {
         $recetas = new Recetas(['usuario_id' => Yii::$app->user->id]);
+        // Pruebas
+//        $recetas->titulo = 'prueba1';
+//        $recetas->ingredientes = '1 prueba';
+//        $recetas->dificultad_id = 1;
+//        $recetas->tiempo = '30min';
+//        $recetas->categoria_id = 1;
+//        $recetas->comensales = 2;
         $pasos = new Pasos();
         $categorias = Categorias::find()->all();
         $dificultades = Dificultades::find()->all();
@@ -97,10 +104,14 @@ class RecetasController extends Controller
                 if (preg_match('/^foto/', $i) == 1) {
                     continue;
                 }
-                $newPasos = new Pasos();
-                $newPasos->texto = $data;
-                $newPasos->foto = UploadedFile::getInstance($newPasos, 'foto' . $i);
-                $pasosArray[$i] = $newPasos;
+                if ($data == '') {
+                    $pasosArray = [];
+                } else {
+                    $newPasos = new Pasos();
+                    $newPasos->texto = $data;
+                    $newPasos->foto = UploadedFile::getInstance($newPasos, 'foto' . $i);
+                    $pasosArray[$i] = $newPasos;
+                }
             }
             $transaction = Yii::$app->db->beginTransaction();
 
@@ -158,6 +169,9 @@ class RecetasController extends Controller
         }
 
         $pasos = Pasos::findAll(['receta_id' => $model->id]);
+        if (empty($pasos)) {
+            $pasos = [new Pasos()];
+        }
         $categorias = Categorias::find()->all();
         $dificultades = Dificultades::find()->all();
         $model->etiqueta = array_column($model->etiquetas, 'nombre');
@@ -171,15 +185,19 @@ class RecetasController extends Controller
                 if (preg_match('/^foto/', $i) == 1) {
                     continue;
                 }
-                if (isset($pasos[$i])) {
-                    $newPasos = $pasos[$i];
+                if ($data == '') {
+                    $pasosArray = [];
                 } else {
-                    $newPasos = new Pasos();
+                    if (isset($pasos[$i])) {
+                        $newPasos = $pasos[$i];
+                    } else {
+                        $newPasos = new Pasos();
+                    }
+                    $newPasos->texto = $data;
+                    $newPasos->foto = UploadedFile::getInstance($newPasos, 'foto' . $i);
+                    $pasosArray[$i] = $newPasos;
+                    $numPasosActual++;
                 }
-                $newPasos->texto = $data;
-                $newPasos->foto = UploadedFile::getInstance($newPasos, 'foto' . $i);
-                $pasosArray[$i] = $newPasos;
-                $numPasosActual++;
             }
 
             $numPasos = count($pasos);

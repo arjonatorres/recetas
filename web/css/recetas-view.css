@@ -36,8 +36,8 @@
 
 .ingredientes {
     color: #aaa;
-    display: table-cell;
-    width: 10000px;
+    /*display: table-cell;*/
+    /*width: 10000px;*/
 }
 
 .cont-ingred {
@@ -106,4 +106,8 @@ p.text-center {
 
 .gris {
     color: #999;
+}
+
+h3 {
+    border-bottom: solid #ccc 1px;
 }
