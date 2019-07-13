@@ -161,6 +161,35 @@ $('#boton-receta').on('click', function(e) {
         $('.field-recetas-foto').removeClass('has-error');
         $('.field-recetas-foto').addClass('has-success');
         borrarFotos();
+        if ($('#recetas-source_url').val() != "") {
+            if ($('.pasos').length == 1) {
+                if ($('#pasos-texto').val() == "") {
+                    $('#form').yiiActiveForm('remove', 'pasos-texto');
+                    $('#form').yiiActiveForm('remove', 'pasos-texto-0');
+                }
+            }
+        } else {
+            if ($('#form').yiiActiveForm('find', 'pasos-texto') == undefined) {
+                $("#form").yiiActiveForm("add",{
+                    "id": "pasos-texto",
+                    "name": "Pasos[0]",
+                    "container": ".field-pasos-texto",
+                    "input": "#pasos-texto",
+                    "error": ".help-block",
+                    "validate": function(attribute, value, messages, deferred, $form) {
+                        yii.validation.required(value, messages, {
+                            "message": "Paso no puede estar vacío."
+                        });
+                        yii.validation.string(value, messages, {
+                            "message": "Paso debe ser una cadena de caracteres.",
+                            "max": 10000,
+                            "tooLong": "Paso debería contener como máximo 10,000 letras.",
+                            "skipOnEmpty": 1
+                        });
+                    }
+                });
+            }
+        }
         $('#form').submit();
     } else {
         $('.field-recetas-foto').removeClass('has-success');

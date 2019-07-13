@@ -23,6 +23,8 @@ use yii\db\Expression;
  * @property int $usuario_id
  * @property string $created_at
  * @property string $updated_at
+ * @property string $source_name
+ * @property string $source_url
  *
  * @property Pasos[] $pasos
  * @property Categorias $categoria
@@ -65,6 +67,8 @@ class Recetas extends \yii\db\ActiveRecord
             [['categoria_id', 'dificultad_id'], 'integer'],
             [['created_at', 'updated_at', 'etiqueta'], 'safe'],
             [['titulo'], 'string', 'max' => 255],
+            [['source_name'], 'string', 'max' => 50],
+            [['source_url'], 'string', 'max' => 1000],
             [['historia', 'ingredientes', 'comentarios'], 'string', 'max' => 10000],
             [['tiempo'], 'string', 'max' => 10],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::className(), 'targetAttribute' => ['categoria_id' => 'id']],
@@ -94,6 +98,8 @@ class Recetas extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'foto' => 'Foto principal',
             'etiqueta' => 'Etiquetas',
+            'source_name' => 'Nombre de la fuente',
+            'source_url' => 'Enlace de la fuente',
         ];
     }
 
