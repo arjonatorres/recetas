@@ -13,11 +13,11 @@ use yii\web\JsExpression;
 /* @var $form yii\widgets\ActiveForm */
 
 echo Dialog::widget();
-$this->registerJsFile('@web/js/recetas.js?r=20190207', [
+$this->registerJsFile('@web/js/recetas.js?r=20190612', [
     'depends' => [\yii\web\JqueryAsset::className()],
 ]);
 
-$this->registerCssFile('@web/css/recetas.css?r=20181226', [
+$this->registerCssFile('@web/css/recetas.css?r=20190612', [
         'depends' => [\yii\bootstrap\BootstrapAsset::className(), \yii\web\YiiAsset::className()],
 ]);
 echo Dialog::widget([
@@ -115,6 +115,21 @@ $urlEtiquetas = \yii\helpers\Url::to(['/etiquetas/list']);
                         <?= $form->field($model, 'tiempo')->textInput([
                             'maxlength' => true,
                             'placeholder' => '30min',
+                        ]) ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $form->field($model, 'source_name')->textInput([
+                            'maxlength' => true,
+                            'placeholder' => 'Nombre de la fuente de inspiración...',
+                        ]) ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $form->field($model, 'source_url')->textInput([
+                            'maxlength' => true,
+                            'placeholder' => 'URL de la fuente de inspiración...',
                         ]) ?>
                     </div>
                 </div>

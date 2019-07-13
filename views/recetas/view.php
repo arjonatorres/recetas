@@ -16,6 +16,7 @@ $usuario = Yii::$app->user->identity;
 $rutaAvatar = $usuario->rutaAvatar;
 $numPasos = count($model->pasos);
 $ruta = $model->rutaImagen;
+$nPersonas = $model->comensales . ($model->comensales > 1? ' personas': ' persona');
 
 echo Dialog::widget([
         'dialogDefaults' => [
@@ -117,14 +118,26 @@ $this->registerJs($js, View::POS_END);
                     </div>
                 <?php } ?>
 
-                <div class="col-md-12 margin10 cont-ingred">
-                    <h3 class="ingredientes">Ingredientes</h3>
-                    <div class="comensales">
-                        <h4>Para <?= $model->comensales ?> persona<?= $model->comensales != 1 ? 's' : ''?></h4>
-                    </div>
-                    <?= nl2br(Html::encode($model->ingredientes)) ?>
+                <div class="col-md-12">
+                    <h3 class="ingredientes">Ingredientes (<?= $nPersonas ?>)</h3>
+                    <span><?= nl2br(Html::encode($model->ingredientes)) ?></span>
                 </div>
 
+                <?php if (isset($model->source_url)) { ?>
+                    <div class="col-md-12">
+                        <h3 class="encabezados">Fuente de Inspiración de la receta</h3>
+                        <span><?= Html::a(Html::encode(isset($model->source_name)?$model->source_name:$model->source_url), Html::encode($model->source_url), ['target' => '_blank']) ?></span>
+                    </div>
+                <?php } ?>
+
+                <?php if (isset($model->source_name) && !isset($model->source_url)) { ?>
+                    <div class="col-md-12">
+                        <h3 class="encabezados">Fuente de Inspiración de la receta</h3>
+                        <span><?= Html::encode($model->source_name) ?></span>
+                    </div>
+                <?php } ?>
+
+                <?php if (count($model->pasos) > 0) { ?>
                 <div class="col-md-12 div-pasos">
                     <h3 class="encabezados">Pasos</h3>
                     <?php foreach ($model->pasos as $i => $paso) { ?>
@@ -166,6 +179,7 @@ $this->registerJs($js, View::POS_END);
                         </div>
                     <?php }?>
                 </div>
+                <?php }?>
 
                 <?php if (isset($model->comentarios)) { ?>
                     <div class="col-md-12 margin20">
