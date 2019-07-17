@@ -21,7 +21,7 @@ use app\models\Categorias;
 use app\models\Dificultades;
 // end
 
-$this->registerJsFile('@web/js/site.js?r=20190323', [
+$this->registerJsFile('@web/js/site.js?r=20190717', [
     'depends' => [\yii\web\JqueryAsset::className()],
 ]);
 
@@ -310,6 +310,7 @@ AppAsset::register($this);
 </div>
 
 <footer class="footer">
+    <button class='scrollTop btn-circle btn-lg'><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></button>
     <div class="container">
         <p class="pull-left">&copy; José Arjona <?= date('Y') ?></p>
 

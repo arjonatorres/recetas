@@ -1,5 +1,5 @@
 .titulo {
-    color: #009A3D;
+    color: #3fa59d;
     font-weight: bold;
     margin-top: 20px;
     display: table-cell;
@@ -108,6 +108,6 @@ p.text-center {
     color: #999;
 }
 
-h3 {
+.panel-principal h3 {
     border-bottom: solid #ccc 1px;
 }

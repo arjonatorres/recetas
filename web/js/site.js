@@ -4,7 +4,7 @@ avanzada = false;
 $('.busqueda-avanzada').on('click', function() {
     $(this).toggleClass('busqueda-avanzada-activada');
     $(this).toggleClass('busqueda-avanzada');
-    $('.adv-search').toggle('slow');
+    $('.adv-search').slideToggle('slow');
     if (pulsado == 0 && !avanzada) {
         setTimeout(function(){
             $("#recetassearch-etiqueta").trigger('change');
@@ -31,3 +31,36 @@ $('#advanced-search .reset').on('click', function(e) {
     });
     $('#recetassearch-etiqueta').val('').trigger('change');
 });
+
+$(function () {
+    var lastScrollTop = 0;
+    var $navbar = $('.navbar');
+
+    $(window).scroll(function(event){
+        var st = $(this).scrollTop();
+
+        $navbar.stop();
+        if (st > lastScrollTop && (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100)) {
+            $navbar.fadeOut();
+        } else {
+            $navbar.fadeIn();
+        }
+        lastScrollTop = st;
+    });
+});
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        $('.scrollTop').css({display: 'block'});
+    } else {
+        $('.scrollTop').css({display: 'none'});
+    }
+}
+
+function topFunction() {
+    $('html, body').animate({scrollTop: 0});
+}
+
+$('.scrollTop').on('click', topFunction);
