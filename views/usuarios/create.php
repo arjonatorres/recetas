@@ -15,7 +15,7 @@ $this->registerJsFile('@web/js/usuarios.js?r=20181228', [
 <div class="site-signup">
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <div class="panel panel-default panel-principal">
+            <div class="panel panel-success panel-principal">
                 <div class="panel-heading panel-heading-principal">
                     <h3 class="panel-title"><?= Html::encode($title) ?></h3>
                 </div>
