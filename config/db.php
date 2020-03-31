@@ -1,16 +1,16 @@
 <?php
 if (YII_ENV_DEV) {
-    // Configuración para entorno producción:
+    // Configuración para entorno local:
     $host = 'localhost';
-    $port = '5432';
+    $port = '3306';
     $dbname = 'recetas';
-    $username = 'postgres';
+    $username = 'jose';
     $password = 'jose';
     $extra = [];
 } else {
-//    // Configuración para entorno local:
+    // Configuración para entorno producción:
     $host = 'localhost';
-    $port = '5432';
+    $port = '3306';
     $dbname = 'recetas';
     $username = 'jose';
     $password = 'jose';
@@ -18,7 +18,7 @@ if (YII_ENV_DEV) {
 }
 return [
         'class' => 'yii\db\Connection',
-        'dsn' => "pgsql:host=$host;port=$port;dbname=$dbname",
+        'dsn' => "mysql:host=$host;dbname=$dbname",
         'username' => $username,
         'password' => $password,
         'charset' => 'utf8',
